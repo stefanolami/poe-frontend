@@ -6,11 +6,11 @@ export default createMiddleware({
 	locales,
 
 	// Used when no locale matches
-	defaultLocale: 'ro',
+	defaultLocale: 'en',
 	localePrefix,
 })
 
 export const config = {
 	// Match only internationalized pathnames
-	matcher: ['/', '/(ro|en)/:path*'],
+	matcher: ['/', '/(en|ro)/:path*'],
 }

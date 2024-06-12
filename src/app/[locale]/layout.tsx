@@ -30,9 +30,7 @@ export default function LocaleLayout({
 	return (
 		<html lang={locale}>
 			<body>
-				<HeaderWrapper>
-					<Header />
-				</HeaderWrapper>
+				<HeaderWrapper></HeaderWrapper>
 				<main>{children}</main>
 			</body>
 		</html>
