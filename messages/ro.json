@@ -1,0 +1,18 @@
+{
+	"Index": {
+		"title": "Buna world!",
+		"hero": "Buna Hero!"
+	},
+	"LocaleSwitcher": {
+		"en": "Engleză",
+		"ro": "Românesc"
+	},
+	"Navigation": {
+		"home": "Acasă",
+		"about": "Despre Noi",
+		"prices": "Tarife",
+		"deals": "Oferte",
+		"gallery": "Galerie",
+		"contacts": "Contacts"
+	}
+}
