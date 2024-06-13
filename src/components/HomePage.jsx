@@ -68,7 +68,7 @@ export default function HomePage({ title, children }) {
 	const handleSectorChange = (selectedOption) => {
 		setFormData({
 			...formData,
-			sector: selectedOption.value,
+			sector: selectedOption,
 		})
 		console.log('formData', formData)
 	}
@@ -76,14 +76,14 @@ export default function HomePage({ title, children }) {
 	const handleTypeOfVehicleChange = (selectedOption) => {
 		setFormData({
 			...formData,
-			typeOfVehicle: selectedOption.value,
+			typeOfVehicle: selectedOption,
 		})
 		console.log('formData', formData)
 	}
 	const handleTypeOfVehicleCountryChange = (selectedOption) => {
 		setFormData({
 			...formData,
-			typeOfVehicleCountry: selectedOption.value,
+			typeOfVehicleCountry: selectedOption,
 		})
 		console.log('formData', formData)
 	}
@@ -91,7 +91,7 @@ export default function HomePage({ title, children }) {
 	const handleTypeOfContractChange = (selectedOption) => {
 		setFormData({
 			...formData,
-			typeOfContract: selectedOption.value,
+			typeOfContract: selectedOption,
 		})
 		console.log('formData', formData)
 	}
@@ -104,10 +104,10 @@ export default function HomePage({ title, children }) {
 		const data = {
 			name: formData.name,
 			email: formData.email,
-			sector: [formData.sector],
-			typeOfVehicle: [formData.vehicle],
-			typeOfVehicleCountry: formData.country,
-			typeOfContract: [formData.contract],
+			sector: [formData.sector.value],
+			typeOfVehicle: [formData.typeOfVehicle.value],
+			typeOfVehicleCountry: formData.typeOfVehicleCountry.value,
+			typeOfContract: [formData.typeOfContract.value],
 		}
 		console.log('data', data)
 		try {
