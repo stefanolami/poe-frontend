@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { unstable_setRequestLocale } from 'next-intl/server'
 import Header from '@/components/Header'
 import HeaderWrapper from '@/components/HeaderWrapper'
-
-const inter = Inter({ subsets: ['latin'] })
+import { jose, unna } from '../fonts'
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -28,7 +26,10 @@ export default function LocaleLayout({
 }) {
 	unstable_setRequestLocale(locale)
 	return (
-		<html lang={locale}>
+		<html
+			lang={locale}
+			className={`${jose.variable} ${unna.variable}`}
+		>
 			<body>
 				<HeaderWrapper></HeaderWrapper>
 				<main>{children}</main>

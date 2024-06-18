@@ -2,7 +2,6 @@
 import { useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
-import SectorButton from './SectorButton'
 
 const sectors = [
 	{ value: 'eMobility', label: 'E-Mobility' },
@@ -46,7 +45,7 @@ const colorStyles = {
 	}),
 }
 
-export default function HomePage({ title, children }) {
+export default function Form() {
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -131,13 +130,8 @@ export default function HomePage({ title, children }) {
 		}
 	}
 
-	return {
-		/* <div>
-			<h1 className="font-unna text-3xl font-bold text-secondary">
-				{title}
-			</h1>
-			<SectorButton text="E-Mobility" />
-			{children}
+	return (
+		<div>
 			<form
 				className="flex flex-col w-2/5 mt-10"
 				onSubmit={handleSubmit}
@@ -224,6 +218,6 @@ export default function HomePage({ title, children }) {
 					Submit
 				</button>
 			</form>
-		</div> */
-	}
+		</div>
+	)
 }
