@@ -1,4 +1,4 @@
-import SectorSelector from './sub/SectorSelector'
+import SectorSelector from './SectorSelector'
 
 export default function Hero() {
 	return (
