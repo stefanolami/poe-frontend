@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { motion, useAnimation } from 'framer-motion'
 
@@ -68,19 +70,19 @@ const SectorButton = ({ text }) => {
 
 	return (
 		<motion.button
-			className="relative flex items-center justify-center px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-100 overflow-hidden"
+			className="relative flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20"
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
 			<motion.span
-				className="relative z-10"
+				className="relative z-10 font-unna font-bold text-base xl:text-4xl"
 				animate={controlsText}
 				initial={{ x: 0 }}
 			>
 				{text}
 			</motion.span>
 			<motion.span
-				className="absolute right-4"
+				className="absolute right-4 xl:text-5xl"
 				animate={controlsArrow}
 				initial={{ opacity: 0, x: 10 }}
 				transition={{ duration: 0.3 }}

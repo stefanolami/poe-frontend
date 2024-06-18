@@ -102,14 +102,6 @@ export default function DesktopLocaleSwitcher() {
 					style={{ originY: 'top', translateX: '-50%' }}
 					className="flex flex-col items-center shadow-xl absolute top-[100%] left-[50%] overflow-hidden"
 				>
-					{/* <LocaleElement
-						locale="en"
-						handler={changeLocale}
-					/>
-					<LocaleElement
-						locale="ro"
-						handler={changeLocale}
-					/> */}
 					{locales.map((loc) => {
 						if (loc !== locale) {
 							return (
