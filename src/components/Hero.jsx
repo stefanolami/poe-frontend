@@ -1,13 +1,13 @@
 export default function Hero() {
 	return (
 		<div>
-			<h1 className="text-center text-primary font-unna font-bold text-[60px] mt-6">
+			<h1 className="text-center text-primary font-unna font-bold text-[60px] md:text-[90px] xl:text-[128px] mt-6">
 				POE
 			</h1>
-			<h2 className="text-center text-primary font-unna font-bold text-[20px] mt-2">
+			<h2 className="text-center text-primary font-unna font-bold text-[20px] md:text-[32px] xl:text-5xl mt-2 xl:mt-0">
 				Your (Public Opportunity Essentials)
 			</h2>
-			<p className="text-center text-primary text-xs m-5 font-normal">
+			<p className="text-center text-primary text-xs md:text-base xl:text-2xl m-5 xl:m-20 xl:mx-52 font-normal">
 				POE is a dynamic, real-time alert system designed to connect
 				stakeholders—businesses, NGOs, and individuals—with public
 				funding, public financing, and public tender opportunities. POE

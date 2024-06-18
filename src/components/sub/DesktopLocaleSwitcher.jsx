@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useTransition } from 'react'
 import { useRouter, usePathname } from '@/navigation'
-import Image from 'next/image'
 import { useLocale } from 'next-intl'
 
 const wrapperVariants = {
@@ -39,21 +38,22 @@ const actionIconVariants = {
 	closed: { scale: 0, y: -7 },
 }
 
-const LocaleElement = ({ locale, icon, handler }) => {
+const locales = ['en', 'de', 'fr', 'es', 'ro']
+
+const LocaleElement = ({ locale, handler }) => {
+	const text = locale.toUpperCase()
 	return (
 		<motion.li
 			variants={itemVariants}
-			className="flex items-center justify-center gap-2 w-full py-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-beige3 hover:shadow-md text-white hover:text-black transition-colors cursor-pointer"
+			className=""
 		>
-			<motion.span variants={actionIconVariants}>
-				<Image
-					onClick={handler}
-					id={locale}
-					src={icon}
-					alt="logo"
-					width="40"
-					height="40"
-				/>
+			<motion.span
+				onClick={handler}
+				id={locale}
+				variants={actionIconVariants}
+				className="flex items-center justify-center font-unna font-normal text-base xl:text-lg text-white bg-secondary w-12 xl:w-16 py-1 cursor-pointer hover:brightness-95 hover:shadow-xl"
+			>
+				{text}
 			</motion.span>
 		</motion.li>
 	)
@@ -66,10 +66,6 @@ export default function DesktopLocaleSwitcher() {
 	const [isPending, startTransition] = useTransition()
 	const pathname = usePathname()
 	const icons = ['/romania.png', '/uk.png']
-	const roIcon = icons[0]
-	const ukIcon = icons[1]
-	const expandArrow = '/expand-arrow.png'
-	const collapseArrow = '/collapse-arrow.png'
 
 	function changeLocale(event) {
 		const nextLocale = event.target.id
@@ -88,15 +84,9 @@ export default function DesktopLocaleSwitcher() {
 			>
 				<button
 					onClick={() => setOpen((pv) => !pv)}
-					className="flex items-center rounded-md gap-2"
+					className="flex items-center justify-center gap-2 font-unna font-normal text-base xl:text-lg text-white bg-secondary w-12 xl:w-16 py-1 hover:brightness-95 hover:shadow-xl"
 				>
-					<Image
-						src={locale === 'ro' ? roIcon : ukIcon}
-						alt="logo"
-						width="40"
-						height="40"
-						className=""
-					/>
+					{locale.toUpperCase()}
 					{/* <Image
 						src={open ? collapseArrow : expandArrow}
 						alt="dropdown arrow"
@@ -110,48 +100,28 @@ export default function DesktopLocaleSwitcher() {
 					initial={wrapperVariants.closed}
 					variants={wrapperVariants}
 					style={{ originY: 'top', translateX: '-50%' }}
-					className="flex flex-col items-center w-16 gap-2 p-2 rounded-lg text-white border border-beige3 shadow-xl absolute top-[120%] left-[50%] overflow-hidden"
+					className="flex flex-col items-center shadow-xl absolute top-[100%] left-[50%] overflow-hidden"
 				>
-					{/* <motion.li
-						variants={itemVariants}
-						className="flex items-center justify-center gap-2 w-full py-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-beige3 hover:shadow-md text-white hover:text-black transition-colors cursor-pointer"
-					>
-						<motion.span variants={actionIconVariants}>
-							<Image
-								onClick={changeLocale}
-								id="ro"
-								src={roIcon}
-								alt="logo"
-								width="40"
-								height="40"
-							/>
-						</motion.span>
-					</motion.li>
-					<motion.li
-						variants={itemVariants}
-						className="flex items-center justify-center gap-2 w-full py-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-beige3 hover:shadow-md text-white hover:text-black transition-colors cursor-pointer"
-					>
-						<motion.span variants={actionIconVariants}>
-							<Image
-								onClick={changeLocale}
-								id="en"
-								src={ukIcon}
-								alt="logo"
-								width="40"
-								height="40"
-							/>
-						</motion.span>
-					</motion.li> */}
-					<LocaleElement
+					{/* <LocaleElement
 						locale="en"
-						icon={ukIcon}
 						handler={changeLocale}
 					/>
 					<LocaleElement
 						locale="ro"
-						icon={roIcon}
 						handler={changeLocale}
-					/>
+					/> */}
+					{locales.map((loc) => {
+						if (loc !== locale) {
+							return (
+								<LocaleElement
+									key={loc}
+									locale={loc}
+									handler={changeLocale}
+								/>
+							)
+						}
+						return null
+					})}
 				</motion.ul>
 			</motion.div>
 		</div>
