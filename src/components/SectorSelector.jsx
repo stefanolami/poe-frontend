@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { useMyContext } from '@/app/context-provider'
+import { setCookie, getCookie, deleteCookie } from 'cookies-next'
 import SectorButton from './sub/SectorButton'
 import GeographySelector from './sub/GeographySelector'
 
@@ -14,29 +15,51 @@ export default function SectorSelector() {
 	const { selectedSector, setSelectedSector } = useMyContext()
 
 	const geoRef = useRef()
+	const locale = useLocale()
 
 	const handleClick = (sector) => {
-		if (sector == selectedSector) {
+		console.log('selectedSector', selectedSector)
+		console.log('sector', sector)
+		if (sector.value == selectedSector.value) {
+			console.log('same sector')
 			setSelectedSector({})
+			deleteCookie('selectedSector')
 			setOpenGeographies(false)
+			deleteCookie('openGeographies')
 			return
+		} else {
+			console.log('different sector')
+			setSelectedSector(sector)
+			setCookie('selectedSector', JSON.stringify(sector))
+			setOpenGeographies(true)
+			setCookie('openGeographies', true)
+			setTimeout(() => {
+				geoRef.current?.scrollIntoView({ behavior: 'smooth' })
+			}, 100)
 		}
-		setSelectedSector(sector)
-		setOpenGeographies(true)
-		console.log(selectedSector)
-		setTimeout(() => {
-			geoRef.current?.scrollIntoView({ behavior: 'smooth' })
-		}, 100)
 	}
 
 	useEffect(() => {
-		setSelectedSector({})
-	}, [])
+		const localSector = getCookie('selectedSector')
+		const localOpenGeographies = getCookie('openGeographies')
+		if (localSector) {
+			setSelectedSector(JSON.parse(localSector))
+		} else {
+			setSelectedSector({})
+		}
+
+		if (localOpenGeographies) {
+			setOpenGeographies(true)
+		} else {
+			setOpenGeographies(false)
+		}
+		console.log('localSector', selectedSector)
+	}, [locale])
 
 	return (
 		<div>
 			<div className="flex flex-col xl:flex-row items-center justify-center gap-4 xl:gap-12 mx-auto mt-10 xl:mt-12 3xl:mt-24">
-				{selectedSector !== 'aviation' ? (
+				{selectedSector.value !== 'aviation' ? (
 					<SectorButton
 						text={'E-Mobility'}
 						handler={() =>
@@ -45,10 +68,10 @@ export default function SectorSelector() {
 								label: 'E-Mobility',
 							})
 						}
-						activeButton={selectedSector}
+						activeButton={selectedSector.value}
 					/>
 				) : null}
-				{selectedSector !== 'e-mobility' ? (
+				{selectedSector.value !== 'e-mobility' ? (
 					<SectorButton
 						text={'Aviation'}
 						handler={() =>
@@ -57,7 +80,7 @@ export default function SectorSelector() {
 								label: 'Aviation',
 							})
 						}
-						activeButton={selectedSector}
+						activeButton={selectedSector.value}
 					/>
 				) : null}
 			</div>
