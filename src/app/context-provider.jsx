@@ -5,7 +5,7 @@ const Context = createContext()
 
 export function ContextProvider({ children }) {
 	const [geographies, setGeographies] = useState([])
-	const [selectedSector, setSelectedSector] = useState('')
+	const [selectedSector, setSelectedSector] = useState({})
 
 	return (
 		<Context.Provider

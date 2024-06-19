@@ -32,7 +32,7 @@ export default function GeographySelector() {
 	}
 
 	const handleCLick = () => {
-		if (geographies.length > 0 && selectedSector.length > 0) {
+		if (geographies.length > 0 && selectedSector.value.length > 0) {
 			router.push(`/${locale}/selection`)
 		} else if (geographies.length === 0) {
 			setMissingGeographies('Please select at least one geography')

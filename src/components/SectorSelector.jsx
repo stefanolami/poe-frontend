@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { useMyContext } from '@/app/context-provider'
@@ -17,7 +17,7 @@ export default function SectorSelector() {
 
 	const handleClick = (sector) => {
 		if (sector == selectedSector) {
-			setSelectedSector('')
+			setSelectedSector({})
 			setOpenGeographies(false)
 			return
 		}
@@ -29,20 +29,34 @@ export default function SectorSelector() {
 		}, 100)
 	}
 
+	useEffect(() => {
+		setSelectedSector({})
+	}, [])
+
 	return (
 		<div>
 			<div className="flex flex-col xl:flex-row items-center justify-center gap-4 xl:gap-12 mx-auto mt-10 xl:mt-12 3xl:mt-24">
 				{selectedSector !== 'aviation' ? (
 					<SectorButton
 						text={'E-Mobility'}
-						handler={() => handleClick('e-mobility')}
+						handler={() =>
+							handleClick({
+								value: 'e-mobility',
+								label: 'E-Mobility',
+							})
+						}
 						activeButton={selectedSector}
 					/>
 				) : null}
 				{selectedSector !== 'e-mobility' ? (
 					<SectorButton
 						text={'Aviation'}
-						handler={() => handleClick('aviation')}
+						handler={() =>
+							handleClick({
+								value: 'aviation',
+								label: 'Aviation',
+							})
+						}
 						activeButton={selectedSector}
 					/>
 				) : null}
