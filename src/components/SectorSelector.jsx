@@ -9,7 +9,9 @@ import GeographySelector from './sub/GeographySelector'
 
 export default function SectorSelector() {
 	const [openGeographies, setOpenGeographies] = useState(false)
-	const [selectedSector, setSelectedSector] = useState('')
+	/* const [selectedSector, setSelectedSector] = useState('') */
+
+	const { selectedSector, setSelectedSector } = useMyContext()
 
 	const geoRef = useRef()
 
