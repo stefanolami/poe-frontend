@@ -30,7 +30,7 @@ export default function GeographySelector() {
 				{items.map((item, index) => (
 					<li
 						key={index}
-						className="flex flex-row items-center gap-2 xl:gap-3 w-[242px] xl:w-[465px]"
+						className="flex flex-row items-center gap-2 xl:gap-3 w-[242px] xl:w-[470px]"
 					>
 						<input
 							type="checkbox"
@@ -46,7 +46,7 @@ export default function GeographySelector() {
 					</li>
 				))}
 			</ul>
-			<button className="mx-auto m-10 xl:m-20 font-unna font-bold text-base xl:text-4xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20">
+			<button className="mx-auto my-10 xl:my-28 font-unna font-bold text-base xl:text-4xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20">
 				Continue
 			</button>
 		</div>
