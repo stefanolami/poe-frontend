@@ -1,8 +1,9 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMyContext } from '@/app/context-provider'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { setCookie, getCookie } from 'cookies-next'
 
 export default function GeographySelector() {
 	const [missingGeographies, setMissingGeographies] = useState('')
@@ -22,8 +23,6 @@ export default function GeographySelector() {
 
 	const handleCheckboxChange = (event) => {
 		const { value, checked } = event.target
-
-		// Update checkedItems based on checkbox state
 		setGeographies((prevGeographies) =>
 			checked
 				? [...prevGeographies, value]
@@ -31,8 +30,10 @@ export default function GeographySelector() {
 		)
 	}
 
-	const handleCLick = () => {
+	const handleCLick = async () => {
 		if (geographies.length > 0 && selectedSector.value.length > 0) {
+			setCookie('geographies', JSON.stringify(geographies))
+			setCookie('selectedSector', JSON.stringify(selectedSector))
 			router.push(`/${locale}/selection`)
 		} else if (geographies.length === 0) {
 			setMissingGeographies('Please select at least one geography')
