@@ -54,6 +54,7 @@ export default function SectorSelector() {
 			setOpenGeographies(false)
 		}
 		console.log('localSector', selectedSector)
+		//eslint-disable-next-line
 	}, [locale])
 
 	return (

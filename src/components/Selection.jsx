@@ -22,6 +22,7 @@ export default function Selection() {
 			setLocalSector(selectedSector)
 			setLocalGeographies(geographies)
 		}
+		//eslint-disable-next-line
 	}, [locale])
 
 	return (
