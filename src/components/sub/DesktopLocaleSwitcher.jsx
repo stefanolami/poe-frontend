@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTransition } from 'react'
 import { useRouter, usePathname } from '@/navigation'
 import { useLocale } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 
 const wrapperVariants = {
 	open: {
@@ -59,19 +60,27 @@ const LocaleElement = ({ locale, handler }) => {
 	)
 }
 
+const getFullUrl = (pathname, searchParams) => {
+	return `${pathname}?${searchParams.toString()}`
+}
+
 export default function DesktopLocaleSwitcher() {
 	const [open, setOpen] = useState(false)
 	const locale = useLocale()
 	const router = useRouter()
 	const [isPending, startTransition] = useTransition()
 	const pathname = usePathname()
-	const icons = ['/romania.png', '/uk.png']
+	const searchParams = useSearchParams()
+	console.log(pathname)
+	console.log('searchparams', searchParams.toString())
 
 	function changeLocale(event) {
 		const nextLocale = event.target.id
 		console.log(nextLocale)
 		startTransition(() => {
-			router.replace(pathname, { locale: nextLocale })
+			router.replace(getFullUrl(pathname, searchParams), {
+				locale: nextLocale,
+			})
 		})
 		console.log('changing')
 	}
@@ -87,13 +96,6 @@ export default function DesktopLocaleSwitcher() {
 					className="flex items-center justify-center gap-2 font-unna font-normal text-base xl:text-lg text-white bg-secondary w-12 xl:w-16 py-1 hover:brightness-95 hover:shadow-xl"
 				>
 					{locale.toUpperCase()}
-					{/* <Image
-						src={open ? collapseArrow : expandArrow}
-						alt="dropdown arrow"
-						width="15"
-						height="15"
-						className=""
-					/> */}
 				</button>
 
 				<motion.ul
