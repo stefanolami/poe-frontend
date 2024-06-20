@@ -6,6 +6,7 @@ import HeaderWrapper from '@/components/HeaderWrapper'
 import { ContextProvider } from '../context-provider'
 import { jose, unna } from '../fonts'
 import { locales } from '../../navigation'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -30,10 +31,10 @@ export default function LocaleLayout({
 			className={`${jose.variable} ${unna.variable}`}
 		>
 			<body>
-				<HeaderWrapper></HeaderWrapper>
-				<main>
-					<ContextProvider>{children}</ContextProvider>
-				</main>
+				<Suspense fallback="loading">
+					<HeaderWrapper></HeaderWrapper>
+					<main>{children}</main>
+				</Suspense>
 			</body>
 		</html>
 	)
