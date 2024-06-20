@@ -18,6 +18,15 @@
 	.custom-checkbox:checked {
 		@apply bg-secondary;
 	}
+	#geo-modifier .custom-checkbox {
+		@apply border-white;
+	}
+	#geo-modifier .custom-checkbox:checked {
+		@apply bg-white;
+	}
+	#geo-modifier .custom-checkbox::before {
+		@apply bg-primary;
+	}
 }
 
 input[type='checkbox'] {

@@ -93,7 +93,7 @@ export default function DesktopLocaleSwitcher() {
 			>
 				<button
 					onClick={() => setOpen((pv) => !pv)}
-					className="flex items-center justify-center gap-2 font-unna font-normal text-base xl:text-lg text-white bg-secondary w-12 xl:w-16 py-1 hover:brightness-95 hover:shadow-xl"
+					className="flex items-center justify-center gap-2 font-unna font-normal text-base xl:text-lg text-white bg-secondary w-12 xl:w-16 py-1 hover:brightness-95 shadow-md hover:shadow-xl"
 				>
 					{locale.toUpperCase()}
 				</button>

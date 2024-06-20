@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
+import GeographyModifier from './sub/GeographyModifier'
 
 export default function Selection() {
 	const [sector, setSector] = useState('')
@@ -31,13 +32,11 @@ export default function Selection() {
 
 	return (
 		<div className="mt-16">
-			<div className="">
+			<div className="flex flex-col items-center mx-auto justify-center gap-2">
 				<div className="mx-auto font-unna font-bold text-base xl:text-4xl flex items-center justify-center bg-secondary overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20">
 					{sector}
 				</div>
-				<div className="mx-auto font-unna font-bold text-base xl:text-4xl flex items-center justify-center bg-primary overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20">
-					{geographies.join(', ')}
-				</div>
+				<GeographyModifier />
 			</div>
 		</div>
 	)
