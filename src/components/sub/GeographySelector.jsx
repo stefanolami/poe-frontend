@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react'
 import { useMyContext } from '@/app/context-provider'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
-import { setCookie, getCookie } from 'cookies-next'
+import { useSearchParams } from 'next/navigation'
 
 export default function GeographySelector() {
 	const [missingGeographies, setMissingGeographies] = useState('')
+	const [geographies, setGeographies] = useState([])
 	const items = [
 		{ value: 'eu-admin', label: 'EU Administrated' },
 		{ value: 'eu-27', label: 'EU-27, Island, Norway, UK, Switzerland ' },
@@ -18,8 +19,9 @@ export default function GeographySelector() {
 
 	const router = useRouter()
 	const locale = useLocale()
-
-	const { geographies, setGeographies, selectedSector } = useMyContext()
+	const urlParams = useSearchParams()
+	const geoParams = urlParams.get('geo')
+	const sectorParam = urlParams.get('s')
 
 	const handleCheckboxChange = (event) => {
 		const { value, checked } = event.target
@@ -31,18 +33,26 @@ export default function GeographySelector() {
 	}
 
 	const handleCLick = async () => {
-		if (geographies.length > 0 && selectedSector.value.length > 0) {
-			setCookie('geographies', JSON.stringify(geographies))
-			setCookie('selectedSector', JSON.stringify(selectedSector))
-			router.push(`/${locale}/selection`)
+		if (geographies.length > 0 && sectorParam) {
+			router.push(
+				`/${locale}/selection?s=${sectorParam}&geo=${geographies.join(
+					'_'
+				)}`
+			)
 		} else if (geographies.length === 0) {
 			setMissingGeographies('Please select at least one geography')
-		} else if (selectedSector.length === 0) {
+		} else if (!sectorParam) {
 			setMissingGeographies(
 				'Something went wrong. Please refresh the page and try again.'
 			)
 		}
 	}
+
+	useEffect(() => {
+		if (geoParams) {
+			setGeographies(geoParams.split('_'))
+		}
+	}, [locale, geoParams])
 
 	return (
 		<div className="text-xs xl:text-2xl w-full">

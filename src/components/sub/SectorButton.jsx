@@ -1,14 +1,12 @@
 'use client'
 
-import React from 'react'
 import { motion, useAnimation } from 'framer-motion'
-import { useMyContext } from '@/app/context-provider'
+import { useEffect, useState } from 'react'
 
 const SectorButton = ({ text, handler, activeButton }) => {
 	const controlsText = useAnimation()
 	const controlsArrow = useAnimation()
-	const [isHovered, setIsHovered] = React.useState(false)
-	const { geographies, setGeographies } = useMyContext()
+	const [isHovered, setIsHovered] = useState(false)
 
 	const handleMouseEnter = () => {
 		setIsHovered(true)
@@ -18,23 +16,26 @@ const SectorButton = ({ text, handler, activeButton }) => {
 
 	const handleMouseLeave = () => {
 		setIsHovered(false)
-		if (activeButton !== text.toLowerCase()) {
+		if (activeButton !== text) {
 			controlsText.start({ x: 0 })
 			controlsArrow.start({ opacity: 0, x: 10 })
 		}
 	}
 
-	const handleClick = () => {
-		setGeographies(['new geo'])
-		console.log(geographies)
-	}
+	useEffect(() => {
+		if (activeButton == '') {
+			controlsText.start({ x: 0 })
+			controlsArrow.start({ opacity: 0, x: 10 })
+		}
+		//eslint-disable-next-line
+	}, [activeButton])
 
 	return (
 		<motion.button
 			className="relative flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20"
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			onClick={() => handler(text.toLowerCase())}
+			onClick={() => handler()}
 		>
 			<motion.span
 				className="relative z-10 font-unna font-bold text-base xl:text-4xl"
