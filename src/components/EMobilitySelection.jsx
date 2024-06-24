@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
 import GeographyModifier from './sub/GeographyModifier'
+import PriceModal from './sub/PriceModal'
 import selectionData from '../data/selectionData'
 
 export default function EMobilitySelection() {
@@ -461,6 +462,7 @@ export default function EMobilitySelection() {
 					</div>
 				</section>
 			</div>
+			<PriceModal />
 		</div>
 	)
 }
