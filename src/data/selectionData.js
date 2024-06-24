@@ -297,6 +297,44 @@ const selectionData = {
 			},
 		],
 	},
+	language: [
+		{
+			value: 'german',
+			label: 'German',
+		},
+		{
+			value: 'french',
+			label: 'French',
+		},
+		{
+			value: 'portuguese',
+			label: 'Portuguese',
+		},
+		{
+			value: 'danish',
+			label: 'Danish',
+		},
+		{
+			value: 'polish',
+			label: 'Polish',
+		},
+		{
+			value: 'italian',
+			label: 'Italian',
+		},
+		{
+			value: 'spanish',
+			label: 'Spanish',
+		},
+		{
+			value: 'greek',
+			label: 'Greek',
+		},
+		{
+			value: 'netherlands',
+			label: 'Netherlands',
+		},
+	],
 }
 
 export default selectionData
