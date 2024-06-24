@@ -90,13 +90,15 @@ export default function GeographyModifier() {
 							>
 								<input
 									type="checkbox"
-									id={`checkbox-${index}`}
+									id={`checkbox-geo-modifier-${index}`}
 									value={item.value} // Use a unique value for each item
 									checked={geographies.includes(item.value)} // Set checked state
 									onChange={handleCheckboxChange}
 									className="custom-checkbox"
 								/>
-								<label htmlFor={`checkbox-${index}`}>
+								<label
+									htmlFor={`checkbox-geo-modifier-${index}`}
+								>
 									{item.label}
 								</label>
 							</li>

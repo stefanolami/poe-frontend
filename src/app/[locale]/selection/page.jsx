@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl'
 import { unstable_setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import Hero from '@/components/Hero'
-import Selection from '@/components/Selection'
+import EMobilitySelection from '@/components/EMobilitySelection'
 
 export async function generateMetadata({ params: { locale } }) {
 	const t = await getTranslations({
@@ -21,7 +21,7 @@ export default function Geographies({ params: { locale } }) {
 	return (
 		<>
 			<Hero />
-			<Selection />
+			<EMobilitySelection />
 		</>
 	)
 }
