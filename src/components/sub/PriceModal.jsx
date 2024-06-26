@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import selectionData from '@/data/selectionData'
+import { categoryValueToLabel } from '@/utils/helpers'
 
 export default function PriceModal({ data, geographies }) {
 	const [isOpen, setIsOpen] = useState(false)
@@ -57,7 +58,40 @@ export default function PriceModal({ data, geographies }) {
 					className="scale-90"
 				/>
 			</div>
-			{isOpen ? <div className="h-64">{geographies}</div> : null}
+			{isOpen ? (
+				<div className="">
+					{Object.keys(data).map((category) => {
+						if (data[category]?.length > 0) {
+							return (
+								<div key={category}>
+									<div className="text-base font-bold pt-2 pb-1">
+										{categoryValueToLabel(category)}
+									</div>
+									<div className="text-sm">
+										{data[category].map((item) => {
+											return (
+												<div
+													key={item}
+													className="flex flex-row justify-between items-center"
+												>
+													<span>{item}</span>
+													<span>
+														EUR{' '}
+														{processPrice(
+															0,
+															category
+														)}
+													</span>
+												</div>
+											)
+										})}
+									</div>
+								</div>
+							)
+						}
+					})}
+				</div>
+			) : null}
 			<div className="bg-white w-full h-[2px]"></div>
 			<div className="text-base font-bold flex flex-row justify-between items-center pt-2 pb-[10px]">
 				<span>TOTAL</span>

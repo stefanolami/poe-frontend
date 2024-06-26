@@ -133,8 +133,6 @@ const selectionData = {
 					russia: '2500',
 				},
 			},
-		],
-		spareParts: [
 			{
 				value: 'cars',
 				label: 'Cars (up to 3,5 tonnes)',
