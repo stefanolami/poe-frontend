@@ -71,18 +71,14 @@ export default function DesktopLocaleSwitcher() {
 	const [isPending, startTransition] = useTransition()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
-	console.log(pathname)
-	console.log('searchparams', searchParams.toString())
 
 	function changeLocale(event) {
 		const nextLocale = event.target.id
-		console.log(nextLocale)
 		startTransition(() => {
 			router.replace(getFullUrl(pathname, searchParams), {
 				locale: nextLocale,
 			})
 		})
-		console.log('changing')
 	}
 
 	return (

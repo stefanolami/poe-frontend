@@ -9,8 +9,8 @@ export default function GeographySelector() {
 	const [missingGeographies, setMissingGeographies] = useState('')
 	const [geographies, setGeographies] = useState([])
 	const items = [
-		{ value: 'eu-admin', label: 'EU Administrated' },
-		{ value: 'eu-27', label: 'EU-27, Island, Norway, UK, Switzerland ' },
+		{ value: 'euAdmin', label: 'EU Administrated' },
+		{ value: 'eu27', label: 'eu27, Island, Norway, UK, Switzerland ' },
 		{ value: 'brazil', label: 'Brazil' },
 		{ value: 'turkey', label: 'Turkey ' },
 		{ value: 'colombia', label: 'Colombia ' },

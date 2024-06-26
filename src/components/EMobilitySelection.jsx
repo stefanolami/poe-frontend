@@ -33,7 +33,6 @@ export default function EMobilitySelection() {
 				? [...prevData[category], e.target.value]
 				: prevData[category].filter((item) => item !== e.target.value),
 		}))
-		console.log(data)
 	}
 
 	useEffect(() => {
@@ -44,12 +43,13 @@ export default function EMobilitySelection() {
 		}
 		if (geoParams) {
 			setGeographies(geoParams.split('_'))
+			console.log('geographies', geographies)
 		} else {
 			router.replace(`/${locale}`)
 		}
 
 		//eslint-disable-next-line
-	}, [locale])
+	}, [locale, geoParams, sectorParam])
 
 	return (
 		<div className="mt-16 mb-20 text-primary text-xs">
@@ -462,7 +462,10 @@ export default function EMobilitySelection() {
 					</div>
 				</section>
 			</div>
-			<PriceModal />
+			<PriceModal
+				data={data}
+				geographies={geographies}
+			/>
 		</div>
 	)
 }

@@ -10,8 +10,8 @@ export default function GeographyModifier() {
 	const [geographies, setGeographies] = useState([])
 	const [missingGeographies, setMissingGeographies] = useState('')
 	const items = [
-		{ value: 'eu-admin', label: 'EU Administrated' },
-		{ value: 'eu-27', label: 'EU-27, Island, Norway, UK, Switzerland ' },
+		{ value: 'euAdmin', label: 'EU Administrated' },
+		{ value: 'eu27', label: 'eu27, Island, Norway, UK, Switzerland ' },
 		{ value: 'brazil', label: 'Brazil' },
 		{ value: 'turkey', label: 'Turkey ' },
 		{ value: 'colombia', label: 'Colombia ' },
@@ -68,7 +68,7 @@ export default function GeographyModifier() {
 			className="text-xs xl:text-2xl w-40 xl:w-96 bg-primary text-white mb-10"
 		>
 			<div
-				className="flex w-full items-center justify-between px-2 h-9 xl:h-20 cursor-pointer"
+				className="flex w-full items-center justify-center px-2 h-9 xl:h-20 cursor-pointer"
 				onClick={openMenu}
 			>
 				<span className="font-bold">Change Geographies</span>
