@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import GeographyModifier from './sub/GeographyModifier'
 import PriceModal from './sub/PriceModal'
 import selectionData from '../data/selectionData'
+import { useStore } from '../store/store'
 
 export default function EMobilitySelection() {
 	const [sector, setSector] = useState('')
@@ -76,11 +77,38 @@ export default function EMobilitySelection() {
 	}, [locale, geoParams, sectorParam])
 	console.log('languages parent', languages)
 
+	const bearSectorValue = useStore((state) => state.sector.value)
+	const bearSectorLabel = useStore((state) => state.sector.label)
+	const changeBearSectorValue = useStore((state) => state.changeSectorValue)
+	const storeData = useStore((state) => state.data)
+	const addData = useStore((state) => state.addData)
+
+	console.log('storeData', storeData.eMobility)
 	return (
 		<div className="mt-16 mb-20 text-primary text-xs">
 			<div className="flex flex-col items-center mx-auto justify-center gap-2">
+				<button
+					className="mx-auto bg-red-400 w-40 h-16"
+					onClick={() =>
+						addData('eMobility', {
+							value: 'cars',
+							label: 'Cars',
+							geo: geographies,
+						})
+					}
+				>
+					click me
+				</button>
+				<input
+					className="mx-auto bg-slate-800 text-white w-1/3 h-20"
+					type="text"
+					onChange={(e) => changeBearSectorValue(e.target.value)}
+				/>
 				<div className="mx-auto font-unna font-bold text-lg xl:text-4xl flex items-center justify-center bg-secondary overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20">
-					{sector}
+					{bearSectorValue}
+				</div>
+				<div className="mx-auto font-unna font-bold text-lg xl:text-4xl flex items-center justify-center bg-secondary overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20">
+					{bearSectorLabel}
 				</div>
 				<GeographyModifier />
 			</div>
