@@ -6,10 +6,17 @@ import { useLocale } from 'next-intl'
 import { useSearchParams, usePathname } from 'next/navigation'
 import SectorButton from './sub/SectorButton'
 import GeographySelector from './sub/GeographySelector'
+import { useStore } from '@/store/store'
 
 export default function SectorSelector() {
 	const [openGeographies, setOpenGeographies] = useState(false)
-	const [selectedSector, setSelectedSector] = useState('')
+	const [missingGeographies, setMissingGeographies] = useState('')
+
+	const selectedSector = useStore((state) => state.sector)
+	const changeSector = useStore((state) => state.changeSector)
+	const geographies = useStore((state) => state.geographies)
+	const addGeography = useStore((state) => state.addGeography)
+	const removeGeography = useStore((state) => state.removeGeography)
 
 	const urlParams = useSearchParams()
 	const sectorParam = urlParams.get('s')
@@ -20,28 +27,57 @@ export default function SectorSelector() {
 	const pathname = usePathname()
 
 	const handleClick = (sector) => {
-		console.log('selectedSector', selectedSector)
-		console.log('sector', sector)
 		if (sector == selectedSector) {
 			console.log('same sector')
-			router.push(pathname)
+			changeSector('')
+			setOpenGeographies(false)
 			return
 		} else {
 			console.log('different sector')
-			router.push(`${pathname}?s=${sector}`)
+			changeSector(sector)
+			setOpenGeographies(true)
 			setTimeout(() => {
 				geoRef.current?.scrollIntoView({ behavior: 'smooth' })
 			}, 100)
 		}
 	}
 
-	useEffect(() => {
-		if (sectorParam) {
-			setSelectedSector(sectorParam)
-			setOpenGeographies(true)
+	const handleContinue = () => {
+		if (geographies.length > 0 && selectedSector.length > 0) {
+			const geographiesToString = geographies
+				.map((geo) => geo.value)
+				.join('_')
+			router.push(
+				`/${locale}/selection?s=${selectedSector}&geo=${geographiesToString}`
+			)
+		} else if (geographies.length === 0) {
+			setMissingGeographies('Please select at least one geography')
+		} else if (!selectedSector) {
+			setMissingGeographies(
+				'Something went wrong. Please refresh the page and try again.'
+			)
+		}
+	}
+
+	const handleGeographies = (geography) => {
+		if (geographies.includes(geography)) {
+			removeGeography(geography)
 		} else {
-			setSelectedSector('')
-			setOpenGeographies(false)
+			addGeography(geography)
+		}
+		console.log('geographies', geographies)
+	}
+
+	useEffect(() => {
+		if (!selectedSector) {
+			if (sectorParam) {
+				changeSector(sectorParam)
+				setOpenGeographies(true)
+			} else {
+				setOpenGeographies(false)
+			}
+		} else {
+			setOpenGeographies(true)
 		}
 		//eslint-disable-next-line
 	}, [locale, urlParams])
@@ -64,7 +100,16 @@ export default function SectorSelector() {
 					/>
 				) : null}
 			</div>
-			<div ref={geoRef}>{openGeographies && <GeographySelector />}</div>
+			<div ref={geoRef}>
+				{openGeographies && (
+					<GeographySelector
+						missingGeographies={missingGeographies}
+						/* geographies={geographies} */
+						handleContinue={handleContinue}
+						handleGeographies={handleGeographies}
+					/>
+				)}
+			</div>
 		</div>
 	)
 }

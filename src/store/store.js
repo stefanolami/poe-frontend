@@ -11,15 +11,18 @@ export const useStore = create(
 			data: {
 				eMobility: [],
 			},
-			changeSector: (newSector) => set({ sector: newSector }),
+			changeSector: (newSector) =>
+				set((state) => ({ sector: newSector })),
 			addGeography: (newGeography) =>
-				set({ geographies: [...geographies, newGeography] }),
+				set((state) => ({
+					geographies: [...state.geographies, newGeography],
+				})),
 			removeGeography: (geographyToRemove) =>
-				set({
-					geographies: geographies.filter(
+				set((state) => ({
+					geographies: state.geographies.filter(
 						(geography) => geography !== geographyToRemove
 					),
-				}),
+				})),
 			addData: (category, item) =>
 				set(
 					produce((state) => {
