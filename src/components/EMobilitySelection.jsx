@@ -10,6 +10,7 @@ import selectionData from '../data/selectionData'
 export default function EMobilitySelection() {
 	const [sector, setSector] = useState('')
 	const [geographies, setGeographies] = useState([])
+	const [languages, setLanguages] = useState([])
 	const [data, setData] = useState({
 		typeOfVehicle: [],
 		typeOfVehicleContract: [],
@@ -17,7 +18,8 @@ export default function EMobilitySelection() {
 		spareParts: [],
 		chargingStations: [],
 		chargingStationsMaintenance: [],
-		language: [],
+		reportEu: false,
+		reportNonEu: false,
 	})
 
 	const locale = useLocale()
@@ -30,9 +32,31 @@ export default function EMobilitySelection() {
 		setData((prevData) => ({
 			...prevData,
 			[category]: e.target.checked
+				? [
+						...prevData[category],
+						{ value: e.target.value, countries: geographies },
+				  ]
+				: prevData[category].filter(
+						(item) => item.value !== e.target.value
+				  ),
+		}))
+	}
+
+	const handleCheckboxSecondary = (e, category) => {
+		setData((prevData) => ({
+			...prevData,
+			[category]: e.target.checked
 				? [...prevData[category], e.target.value]
 				: prevData[category].filter((item) => item !== e.target.value),
 		}))
+	}
+
+	const handleLanguages = (e) => {
+		setLanguages((prevLanguages) =>
+			e.target.checked
+				? [...prevLanguages, e.target.value]
+				: prevLanguages.filter((item) => item !== e.target.value)
+		)
 	}
 
 	useEffect(() => {
@@ -50,6 +74,7 @@ export default function EMobilitySelection() {
 
 		//eslint-disable-next-line
 	}, [locale, geoParams, sectorParam])
+	console.log('languages parent', languages)
 
 	return (
 		<div className="mt-16 mb-20 text-primary text-xs">
@@ -96,9 +121,15 @@ export default function EMobilitySelection() {
 															'typeOfVehicle'
 														)
 													}
-													checked={data.typeOfVehicle.includes(
-														vehicle.value
-													)}
+													checked={
+														data.typeOfVehicle.find(
+															(item) =>
+																item.value ===
+																vehicle.value
+														)
+															? true
+															: false
+													}
 													className="custom-checkbox scale-[.8] peer"
 												/>
 												<label
@@ -110,8 +141,10 @@ export default function EMobilitySelection() {
 											</div>
 											<span
 												className={
-													data.typeOfVehicle.includes(
-														vehicle.value
+													data.typeOfVehicle.find(
+														(item) =>
+															item.value ===
+															vehicle.value
 													)
 														? 'font-bold'
 														: ''
@@ -169,7 +202,7 @@ export default function EMobilitySelection() {
 														id={`checkbox-vehicle-contract-${index}`}
 														value={contract.value}
 														onChange={(e) =>
-															handleCheckbox(
+															handleCheckboxSecondary(
 																e,
 																'typeOfVehicleContract'
 															)
@@ -245,9 +278,15 @@ export default function EMobilitySelection() {
 															'chargingStations'
 														)
 													}
-													checked={data.chargingStations.includes(
-														item.value
-													)}
+													checked={
+														data.chargingStations.find(
+															(element) =>
+																element.value ===
+																item.value
+														)
+															? true
+															: false
+													}
 													className="custom-checkbox scale-[.8] peer"
 												/>
 												<label
@@ -259,8 +298,10 @@ export default function EMobilitySelection() {
 											</div>
 											<span
 												className={
-													data.chargingStations.includes(
-														item.value
+													data.chargingStations.find(
+														(element) =>
+															element.value ===
+															item.value
 													)
 														? 'font-bold'
 														: ''
@@ -361,15 +402,15 @@ export default function EMobilitySelection() {
 						<div className="flex flex-row justify-start items-start gap-1">
 							<input
 								type="checkbox"
-								id="checkbox-report-noneu"
-								value="report-eu"
+								id="checkbox-report-non-eu"
+								value="report-non-eu"
 								/* onChange={(e) => handleCheckbox(e, 'chargingStations')}
 						checked={data.chargingStations.includes(item.value)} */
 								className="custom-checkbox scale-[.8] peer"
 							/>
 							<label
 								className="peer-checked:font-bold"
-								htmlFor="checkbox-report-noneu"
+								htmlFor="checkbox-report-non-eu"
 							>
 								Quarterly report (with ad hoc alerts for
 								time-sensitive announcements) on international,
@@ -407,10 +448,8 @@ export default function EMobilitySelection() {
 											type="checkbox"
 											id={`checkbox-language-${index}`}
 											value={item.value}
-											onChange={(e) =>
-												handleCheckbox(e, 'language')
-											}
-											checked={data.language.includes(
+											onChange={(e) => handleLanguages(e)}
+											checked={languages.includes(
 												item.value
 											)}
 											className="custom-checkbox scale-[.8] peer"
@@ -463,8 +502,9 @@ export default function EMobilitySelection() {
 				</section>
 			</div>
 			<PriceModal
-				data={data}
-				geographies={geographies}
+				parentData={data}
+				parentGeographies={geographies}
+				languages={languages}
 			/>
 		</div>
 	)

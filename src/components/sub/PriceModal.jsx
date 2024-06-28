@@ -3,9 +3,45 @@ import Image from 'next/image'
 import selectionData from '@/data/selectionData'
 import { categoryValueToLabel } from '@/utils/helpers'
 
-export default function PriceModal({ data, geographies }) {
+export default function PriceModal({
+	parentData,
+	parentGeographies,
+	languages,
+}) {
+	const [data, setData] = useState()
+	const [prices, setPrices] = useState([])
+	const [geographies, setGeographies] = useState()
 	const [isOpen, setIsOpen] = useState(false)
-	const [newGeo, setNewGeo] = useState()
+	const [isOpenCategory, setIsOpenCategory] = useState({
+		general: false,
+		eVehicles: {
+			cars: false,
+			buses: false,
+			trucks: false,
+			planes: false,
+			boats: false,
+			twoWheelers: false,
+		},
+		eVehiclesMaintenance: {
+			evServices: false,
+			diagnosis: false,
+			exchangePurchase: false,
+			cars: false,
+			buses: false,
+			trucks: false,
+			planes: false,
+			boats: false,
+			twoWheelers: false,
+		},
+		chargingStations: {
+			bikesCars: false,
+			buses: false,
+			trucks: false,
+			planes: false,
+			boats: false,
+			twoWheelers: false,
+		},
+	})
 
 	const upArrow = '/up-arrow.png'
 	const downArrow = '/down-arrow.png'
@@ -13,33 +49,90 @@ export default function PriceModal({ data, geographies }) {
 	const toggleOpen = () => {
 		setIsOpen(!isOpen)
 	}
-	const processPrice = (total, category) => {
-		if (data[category].length > 0) {
-			data[category].forEach((item) => {
-				newGeo.forEach((geo) => {
-					total += parseInt(
-						selectionData.eMobility[category].find(
-							(x) => x.value === item
-						).price[geo]
-					)
+
+	const toggleOpenCategory = (category1, category2) => {
+		setIsOpenCategory({
+			...isOpenCategory,
+			[category1]: {
+				...isOpenCategory[category1],
+				[category2]: !isOpenCategory[category1][category2],
+			},
+		})
+	}
+
+	const processPrice = (category) => {
+		if (
+			category == 'typeOfVehicle' ||
+			category == 'eVehiclesMaintenance' ||
+			category == 'chargingStations'
+		) {
+			let total = 0
+			if (data[category].length > 0) {
+				data[category].forEach((item) => {
+					geographies.forEach((geo) => {
+						total += parseInt(
+							selectionData.eMobility[category].find(
+								(x) => x.value === item.value
+							).price[geo]
+						)
+					})
 				})
-			})
-			return total
+				console.log('processed price ', category, total)
+				return total
+			}
+			return null
 		}
 		return null
+	}
+
+	const getSinglePrice = (category, item) => {
+		let total = 0
+		const geo = data[category].find((x) => x.value === item.value).countries
+		geo.forEach((country) => {
+			total += parseInt(
+				selectionData.eMobility[category].find(
+					(x) => x.value === item.value
+				).price[country]
+			)
+		})
+		setPrices((prevPrices) => ({
+			...prevPrices,
+			[category]: [
+				...prevPrices[category],
+				{
+					value: item.value,
+					price: total,
+				},
+			],
+		}))
+		return prices[category]?.find((x) => x.value === item.value).price
+	}
+
+	const getSubTotal = () => {
+		let total = 0
+		for (const category in data) {
+			total += processPrice(category)
+		}
+		return total
 	}
 
 	const getTotalPrice = () => {
 		let total = 0
 		for (const category in data) {
-			total += processPrice(total, category)
+			total += processPrice(category)
+		}
+		if (languages.length > 0) {
+			const increment = languages.length * 0.25
+			total *= 1 + increment
 		}
 		return total
 	}
 
 	useEffect(() => {
-		setNewGeo(geographies)
-	}, [geographies])
+		setData(parentData)
+		setGeographies(parentGeographies)
+	}, [parentGeographies, parentData, languages])
+	console.log('languages children', languages)
 
 	return (
 		<div
@@ -59,44 +152,84 @@ export default function PriceModal({ data, geographies }) {
 				/>
 			</div>
 			{isOpen ? (
-				<div className="">
-					{Object.keys(data).map((category) => {
-						if (data[category]?.length > 0) {
-							return (
-								<div key={category}>
-									<div className="text-base font-bold pt-2 pb-1">
-										{categoryValueToLabel(category)}
-									</div>
-									<div className="text-sm">
-										{data[category].map((item) => {
-											return (
-												<div
-													key={item}
-													className="flex flex-row justify-between items-center"
-												>
-													<span>{item}</span>
-													<span>
-														EUR{' '}
-														{processPrice(
-															0,
-															category
-														)}
-													</span>
-												</div>
-											)
-										})}
-									</div>
-								</div>
-							)
-						}
-					})}
-				</div>
-			) : null}
-			<div className="bg-white w-full h-[2px]"></div>
-			<div className="text-base font-bold flex flex-row justify-between items-center pt-2 pb-[10px]">
-				<span>TOTAL</span>
-				<span>EUR {getTotalPrice()}</span>
-			</div>
+				<>
+					<div className="w-full text-xs">
+						<div className="bg-white w-full h-[2px]"></div>
+						{Object.keys(data).map((category) => {
+							if (
+								category == 'typeOfVehicle' ||
+								category == 'eVehiclesMaintenance' ||
+								category == 'chargingStations'
+							) {
+								if (data[category]?.length > 0) {
+									return (
+										<div key={category}>
+											<div className="text-base font-bold pt-2 pb-1">
+												{categoryValueToLabel(category)}
+											</div>
+											<div className="text-sm">
+												{data[category].map((item) => {
+													return (
+														<div
+															key={item.value}
+															className="flex flex-row justify-between items-center"
+														>
+															<span>
+																{item.value}
+															</span>
+															<span>
+																EUR{' '}
+																{getSinglePrice(
+																	category,
+																	item
+																)}
+															</span>
+														</div>
+													)
+												})}
+											</div>
+										</div>
+									)
+								}
+							}
+						})}
+					</div>
+
+					{languages.length > 0 && (
+						<div className="my-3">
+							<div className="flex flex-col justify-center items-center text-base font-bold">
+								<span className="flex flex-row justify-start w-full">
+									SUBTOTAL
+								</span>
+								<div className="bg-white w-full h-[2px]"></div>
+								<span className="flex flex-row justify-end w-full">
+									EUR {getSubTotal()}
+								</span>
+							</div>
+							<div>
+								<span className="font-bold">Language</span>
+							</div>
+						</div>
+					)}
+					<div className="flex flex-col justify-center items-center text-base font-bold my-3">
+						<span className="flex flex-row justify-start w-full">
+							TOTAL
+						</span>
+						<div className="bg-white w-full h-[2px]"></div>
+						<span className="flex flex-row justify-end w-full">
+							EUR {getTotalPrice()}
+						</span>
+					</div>
+				</>
+			) : (
+				<>
+					<div className="bg-white w-full h-[2px]"></div>
+					<div className="text-base font-bold flex flex-row justify-between items-center pt-2 pb-[10px]">
+						<span>TOTAL</span>
+						<span>EUR {getTotalPrice()}</span>
+					</div>
+				</>
+			)}
 		</div>
 	)
 }

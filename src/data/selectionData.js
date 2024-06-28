@@ -19,7 +19,7 @@ const selectionData = {
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
-					brazil: '2000',
+					brazil: '1000',
 					turkey: '2000',
 					colombia: '1500',
 					russia: '2500',
