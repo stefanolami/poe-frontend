@@ -1,9 +1,4 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useMyContext } from '@/app/context-provider'
-import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
-import { useSearchParams } from 'next/navigation'
 import { useStore } from '@/store/store'
 
 export default function GeographySelector({
@@ -20,10 +15,6 @@ export default function GeographySelector({
 		{ value: 'colombia', label: 'Colombia ' },
 		{ value: 'russia', label: 'Russia ' },
 	]
-
-	const locale = useLocale()
-	const urlParams = useSearchParams()
-	const geoParams = urlParams.get('geo')
 
 	return (
 		<div className="text-xs xl:text-2xl w-full">

@@ -1,13 +1,10 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
-import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useStore } from '@/store/store'
 import Image from 'next/image'
 
 export default function GeographyModifier() {
 	const [isOpen, setIsOpen] = useState(false)
-	const [geographies, setGeographies] = useState([])
 	const [missingGeographies, setMissingGeographies] = useState('')
 	const items = [
 		{ value: 'euAdmin', label: 'EU Administrated' },
@@ -18,34 +15,28 @@ export default function GeographyModifier() {
 		{ value: 'russia', label: 'Russia ' },
 	]
 
-	const router = useRouter()
-	const locale = useLocale()
-	const urlParams = useSearchParams()
-	const geoParams = urlParams.get('geo')
-	const sectorParam = urlParams.get('s')
+	const geographies = useStore((state) => state.geographies)
+	const addGeography = useStore((state) => state.addGeography)
+	const removeGeography = useStore((state) => state.removeGeography)
+
 	const upArrow = '/up-arrow.png'
 	const downArrow = '/down-arrow.png'
 
-	const handleCheckboxChange = (event) => {
-		const { value, checked } = event.target
-		setGeographies((prevGeographies) =>
-			checked
-				? [...prevGeographies, value]
-				: prevGeographies.filter((item) => item !== value)
-		)
+	const handleCheckboxChange = (geography) => {
+		if (geographies.includes(geography)) {
+			removeGeography(geography)
+		} else {
+			addGeography(geography)
+		}
+		console.log('geographies', geographies)
 	}
 
 	const handleCLick = async () => {
 		if (geographies.length > 0) {
-			router.push(
-				`/${locale}/selection?s=${sectorParam}&geo=${geographies.join(
-					'_'
-				)}`
-			)
 			setIsOpen(false)
 		} else if (geographies.length === 0) {
 			setMissingGeographies('Please select at least one geography')
-		} else if (!sectorParam) {
+		} else {
 			setMissingGeographies(
 				'Something went wrong. Please refresh the page and try again.'
 			)
@@ -55,12 +46,6 @@ export default function GeographyModifier() {
 	const openMenu = () => {
 		setIsOpen(!isOpen)
 	}
-
-	useEffect(() => {
-		if (geoParams) {
-			setGeographies(geoParams.split('_'))
-		}
-	}, [locale, geoParams])
 
 	return (
 		<div
@@ -92,8 +77,14 @@ export default function GeographyModifier() {
 									type="checkbox"
 									id={`checkbox-geo-modifier-${index}`}
 									value={item.value} // Use a unique value for each item
-									checked={geographies.includes(item.value)} // Set checked state
-									onChange={handleCheckboxChange}
+									checked={
+										geographies.find(
+											(geo) => item.value == geo.value
+										)
+											? true
+											: false
+									} // Set checked state
+									onChange={() => handleCheckboxChange(item)}
 									className="custom-checkbox"
 								/>
 								<label

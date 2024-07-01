@@ -1,11 +1,11 @@
 import { produce } from 'immer'
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { persist, createJSONStorage, devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 export const useStore = create(
 	persist(
-		(set) => ({
+		devtools((set) => ({
 			sector: '',
 			geographies: [],
 			data: {
@@ -29,9 +29,10 @@ export const useStore = create(
 						state.data[category].push(item)
 					})
 				),
-		}),
+		})),
 		{
 			name: 'zustand-store',
+			storage: createJSONStorage(() => sessionStorage),
 		}
 	)
 )
