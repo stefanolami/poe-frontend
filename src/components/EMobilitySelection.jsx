@@ -9,51 +9,27 @@ import selectionData from '../data/selectionData'
 import { useStore } from '../store/store'
 
 export default function EMobilitySelection() {
-	const [sector, setSector] = useState('')
-	const [geographies, setGeographies] = useState([])
 	const [languages, setLanguages] = useState([])
-	const [data, setData] = useState({
-		typeOfVehicle: [],
-		typeOfVehicleContract: [],
-		eVehiclesMaintenance: [],
-		spareParts: [],
-		chargingStations: [],
-		chargingStationsMaintenance: [],
-		reportEu: false,
-		reportNonEu: false,
-	})
 
 	const storeSector = useStore((state) => state.sector)
+	const geographies = useStore((state) => state.geographies)
 	const storeData = useStore((state) => state.data)
 	const addData = useStore((state) => state.addData)
+	const removeData = useStore((state) => state.removeData)
 
 	const locale = useLocale()
 	const router = useRouter()
-	const urlParams = useSearchParams()
-	const sectorParam = urlParams.get('s')
-	const geoParams = urlParams.get('geo')
 
-	const handleCheckbox = (e, category) => {
-		setData((prevData) => ({
-			...prevData,
-			[category]: e.target.checked
-				? [
-						...prevData[category],
-						{ value: e.target.value, countries: geographies },
-				  ]
-				: prevData[category].filter(
-						(item) => item.value !== e.target.value
-				  ),
-		}))
-	}
-
-	const handleCheckboxSecondary = (e, category) => {
-		setData((prevData) => ({
-			...prevData,
-			[category]: e.target.checked
-				? [...prevData[category], e.target.value]
-				: prevData[category].filter((item) => item !== e.target.value),
-		}))
+	const handleCheckbox = (category, item) => {
+		if (
+			storeData[storeSector.value][category].find(
+				(el) => el.value === item.value
+			)
+		) {
+			removeData(category, item)
+		} else {
+			addData(storeSector.value, category, item)
+		}
 	}
 
 	const handleLanguages = (e) => {
@@ -64,27 +40,25 @@ export default function EMobilitySelection() {
 		)
 	}
 
-	/* useEffect(() => {
-		if (sectorParam) {
-			setSector(sectorParam)
-		} else {
-			router.replace(`/${locale}`)
-		}
-		if (geoParams) {
-			setGeographies(geoParams.split('_'))
-			console.log('geographies', geographies)
-		} else {
-			router.replace(`/${locale}`)
-		}
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			if (
+				Object.keys(storeSector).length === 0 ||
+				geographies.length === 0
+			) {
+				router.push(`/${locale}`)
+			}
+		}, 2000)
 
+		return () => clearTimeout(timeoutId) // Cleanup function
 		//eslint-disable-next-line
-	}, [locale, geoParams, sectorParam]) */
+	}, [storeSector, geographies])
 
 	return (
 		<div className="mt-10 mb-20 text-primary text-xs">
 			<div className="flex flex-col items-center mx-auto justify-center gap-2">
 				<div className="mx-auto font-unna font-bold text-lg xl:text-4xl flex items-center justify-center bg-secondary overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20">
-					{storeSector}
+					{storeSector.label}
 				</div>
 				<GeographyModifier />
 			</div>
@@ -109,27 +83,27 @@ export default function EMobilitySelection() {
 							</span>
 							<ul className="space-y-1 mt-3">
 								{selectionData.eMobility.typeOfVehicle.map(
-									(vehicle, index) => (
+									(item, index) => (
 										<li
-											key={vehicle.value}
+											key={item.value}
 											className="flex flex-row items-center justify-between text-primary text-xs"
 										>
 											<div className="flex flex-row items-center gap-1 justify-start">
 												<input
 													type="checkbox"
 													id={`checkbox-vehicle-type-${index}`}
-													value={vehicle.value}
+													value={item.value}
 													onChange={(e) =>
 														handleCheckbox(
-															e,
-															'typeOfVehicle'
+															'typeOfVehicle',
+															item
 														)
 													}
 													checked={
-														data.typeOfVehicle.find(
-															(item) =>
-																item.value ===
-																vehicle.value
+														storeData.eMobility.typeOfVehicle.find(
+															(element) =>
+																element.value ===
+																item.value
 														)
 															? true
 															: false
@@ -140,20 +114,20 @@ export default function EMobilitySelection() {
 													htmlFor={`checkbox-vehicle-type-${index}`}
 													className="peer-checked:font-bold"
 												>
-													{vehicle.label}
+													{item.label}
 												</label>
 											</div>
 											<span
 												className={
-													data.typeOfVehicle.find(
-														(item) =>
-															item.value ===
-															vehicle.value
+													storeData.eMobility.typeOfVehicle.find(
+														(element) =>
+															element.value ===
+															item.value
 													)
 														? 'font-bold'
 														: ''
 												}
-											>{`EUR ${vehicle.price.euAdmin} / year`}</span>
+											>{`EUR ${item.price.euAdmin} / year`}</span>
 										</li>
 									)
 								)}
@@ -188,39 +162,46 @@ export default function EMobilitySelection() {
 								</li>
 							</ul>
 						</div>
-						{data.typeOfVehicle.length > 0 && (
+						{storeData[storeSector.value].typeOfVehicle.length >
+							0 && (
 							<div className="px-5 py-2">
 								<span className="text-primary font-bold text-xs">
 									Type of Contract
 								</span>
 								<ul className="space-y-1 mt-3">
 									{selectionData.eMobility.typeOfVehicleContract.map(
-										(contract, index) => (
+										(item, index) => (
 											<li
-												key={contract.value}
+												key={item.value}
 												className="flex flex-row items-center justify-between text-primary text-xs"
 											>
 												<div className="flex flex-row items-center gap-1 justify-start">
 													<input
 														type="checkbox"
 														id={`checkbox-vehicle-contract-${index}`}
-														value={contract.value}
+														value={item.value}
 														onChange={(e) =>
-															handleCheckboxSecondary(
-																e,
-																'typeOfVehicleContract'
+															handleCheckbox(
+																'typeOfVehicleContract',
+																item
 															)
 														}
-														checked={data.typeOfVehicleContract.includes(
-															contract.value
-														)}
+														checked={
+															storeData.eMobility.typeOfVehicleContract.find(
+																(element) =>
+																	element.value ===
+																	item.value
+															)
+																? true
+																: false
+														}
 														className="custom-checkbox scale-[.8] peer"
 													/>
 													<label
 														className="peer-checked:font-bold"
 														htmlFor={`checkbox-vehicle-contract-${index}`}
 													>
-														{contract.label}
+														{item.label}
 													</label>
 												</div>
 											</li>
@@ -278,12 +259,14 @@ export default function EMobilitySelection() {
 													value={item.value}
 													onChange={(e) =>
 														handleCheckbox(
-															e,
-															'chargingStations'
+															'chargingStations',
+															item
 														)
 													}
 													checked={
-														data.chargingStations.find(
+														storeData[
+															storeSector.value
+														].chargingStations.find(
 															(element) =>
 																element.value ===
 																item.value
@@ -302,7 +285,9 @@ export default function EMobilitySelection() {
 											</div>
 											<span
 												className={
-													data.chargingStations.find(
+													storeData[
+														storeSector.value
+													].chargingStations.find(
 														(element) =>
 															element.value ===
 															item.value
@@ -316,7 +301,8 @@ export default function EMobilitySelection() {
 								)}
 							</ul>
 						</div>
-						{data.chargingStations.length > 0 && (
+						{storeData[storeSector.value].chargingStations.length >
+							0 && (
 							<div className="px-5 py-2">
 								<span className="text-primary font-bold text-xs">
 									Type of Maintenance
@@ -335,13 +321,22 @@ export default function EMobilitySelection() {
 														value={item.value}
 														onChange={(e) =>
 															handleCheckbox(
-																e,
-																'chargingStationsMaintenance'
+																'chargingStationsMaintenance',
+																item
 															)
 														}
-														checked={data.chargingStationsMaintenance.includes(
-															item.value
-														)}
+														checked={
+															storeData[
+																storeSector
+																	.value
+															].chargingStationsMaintenance.find(
+																(element) =>
+																	element.value ===
+																	item.value
+															)
+																? true
+																: false
+														}
 														className="custom-checkbox scale-[.8] peer"
 													/>
 													<label
@@ -505,11 +500,11 @@ export default function EMobilitySelection() {
 					</div>
 				</section>
 			</div>
-			<PriceModal
-				parentData={data}
+			{/* <PriceModal
+				parentData={storeData}
 				parentGeographies={geographies}
 				languages={languages}
-			/>
+			/> */}
 		</div>
 	)
 }

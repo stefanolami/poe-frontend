@@ -6,10 +6,16 @@ import { immer } from 'zustand/middleware/immer'
 export const useStore = create(
 	persist(
 		devtools((set) => ({
-			sector: '',
+			sector: {},
 			geographies: [],
 			data: {
-				eMobility: [],
+				eMobility: {
+					typeOfVehicle: [],
+					typeOfVehicleContract: [],
+					eVehiclesMaintenance: [],
+					chargingStations: [],
+					chargingStationsMaintenance: [],
+				},
 			},
 			changeSector: (newSector) =>
 				set((state) => ({ sector: newSector })),
@@ -20,13 +26,25 @@ export const useStore = create(
 			removeGeography: (geographyToRemove) =>
 				set((state) => ({
 					geographies: state.geographies.filter(
-						(geography) => geography !== geographyToRemove
+						(geography) =>
+							geography.value !== geographyToRemove.value
 					),
 				})),
-			addData: (category, item) =>
+			addData: (sector, category, item) =>
 				set(
 					produce((state) => {
-						state.data[category].push(item)
+						state.data[sector][category].push(item)
+					})
+				),
+			removeData: (category, itemToRemove) =>
+				set(
+					produce((state) => {
+						const index = state.data.eMobility[category].findIndex(
+							(item) => item.value == itemToRemove.value
+						)
+						if (index !== -1) {
+							state.data.eMobility[category].splice(index, 1)
+						}
 					})
 				),
 		})),

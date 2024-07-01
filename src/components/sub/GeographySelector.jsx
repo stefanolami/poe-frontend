@@ -4,9 +4,10 @@ import { useStore } from '@/store/store'
 export default function GeographySelector({
 	missingGeographies,
 	handleContinue,
-	handleGeographies,
 }) {
 	const geographies = useStore((state) => state.geographies)
+	const addGeography = useStore((state) => state.addGeography)
+	const removeGeography = useStore((state) => state.removeGeography)
 	const items = [
 		{ value: 'euAdmin', label: 'EU Administrated' },
 		{ value: 'eu27', label: 'eu27, Island, Norway, UK, Switzerland ' },
@@ -15,6 +16,16 @@ export default function GeographySelector({
 		{ value: 'colombia', label: 'Colombia ' },
 		{ value: 'russia', label: 'Russia ' },
 	]
+
+	const handleGeographies = (geography) => {
+		console.log(geographies.find((geo) => geography.value == geo.value))
+		if (geographies.find((geo) => geography.value == geo.value)) {
+			console.log('removing')
+			removeGeography(geography)
+		} else {
+			addGeography(geography)
+		}
+	}
 
 	return (
 		<div className="text-xs xl:text-2xl w-full">

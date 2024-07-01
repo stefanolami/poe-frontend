@@ -15,24 +15,22 @@ export default function SectorSelector() {
 	const storeSector = useStore((state) => state.sector)
 	const changeSector = useStore((state) => state.changeSector)
 	const geographies = useStore((state) => state.geographies)
-	const addGeography = useStore((state) => state.addGeography)
-	const removeGeography = useStore((state) => state.removeGeography)
 
 	const geoRef = useRef()
 	const locale = useLocale()
 	const router = useRouter()
 
 	const handleClick = (sector) => {
-		if (sector == activeSector) {
+		if (sector.label == activeSector) {
 			console.log('same sector')
-			changeSector('')
+			changeSector({})
 			setActiveSector('')
 			setOpenGeographies(false)
 			return
 		} else {
 			console.log('different sector')
 			changeSector(sector)
-			setActiveSector(sector)
+			setActiveSector(sector.label)
 			setOpenGeographies(true)
 			setTimeout(() => {
 				geoRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -41,24 +39,15 @@ export default function SectorSelector() {
 	}
 
 	const handleContinue = () => {
-		if (geographies.length > 0 && storeSector.length > 0) {
+		if (geographies.length > 0 && Object.keys(storeSector).length > 0) {
 			router.push(`/${locale}/selection`)
 		} else if (geographies.length === 0) {
 			setMissingGeographies('Please select at least one geography')
-		} else if (!storeSector) {
+		} else if (Object.keys(storeSector).length === 0) {
 			setMissingGeographies(
 				'Something went wrong. Please refresh the page and try again.'
 			)
 		}
-	}
-
-	const handleGeographies = (geography) => {
-		if (geographies.includes(geography)) {
-			removeGeography(geography)
-		} else {
-			addGeography(geography)
-		}
-		console.log('geographies', geographies)
 	}
 
 	/* useEffect(() => {
@@ -82,14 +71,24 @@ export default function SectorSelector() {
 				{activeSector !== 'Aviation' ? (
 					<SectorButton
 						text={'E-Mobility'}
-						handler={() => handleClick('E-Mobility')}
+						handler={() =>
+							handleClick({
+								value: 'eMobility',
+								label: 'E-Mobility',
+							})
+						}
 						activeButton={activeSector}
 					/>
 				) : null}
 				{activeSector !== 'E-Mobility' ? (
 					<SectorButton
 						text={'Aviation'}
-						handler={() => handleClick('Aviation')}
+						handler={() =>
+							handleClick({
+								value: 'aviation',
+								label: 'Aviation',
+							})
+						}
 						activeButton={activeSector}
 					/>
 				) : null}
@@ -100,7 +99,6 @@ export default function SectorSelector() {
 						missingGeographies={missingGeographies}
 						/* geographies={geographies} */
 						handleContinue={handleContinue}
-						handleGeographies={handleGeographies}
 					/>
 				)}
 			</div>

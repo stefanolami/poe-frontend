@@ -23,7 +23,7 @@ export default function GeographyModifier() {
 	const downArrow = '/down-arrow.png'
 
 	const handleCheckboxChange = (geography) => {
-		if (geographies.includes(geography)) {
+		if (geographies.find((geo) => geography.value == geo.value)) {
 			removeGeography(geography)
 		} else {
 			addGeography(geography)
@@ -53,7 +53,7 @@ export default function GeographyModifier() {
 			className="text-xs xl:text-2xl w-40 xl:w-96 bg-primary text-white mb-10"
 		>
 			<div
-				className="flex w-full items-center justify-center px-2 h-9 xl:h-20 cursor-pointer"
+				className="flex w-full items-center justify-center gap-1 h-9 xl:h-20 cursor-pointer"
 				onClick={openMenu}
 			>
 				<span className="font-bold">Change Geographies</span>
