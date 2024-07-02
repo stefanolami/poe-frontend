@@ -40,7 +40,7 @@ export default function EMobilitySelection() {
 		)
 	}
 
-	useEffect(() => {
+	/* useEffect(() => {
 		const timeoutId = setTimeout(() => {
 			if (
 				Object.keys(storeSector).length === 0 ||
@@ -52,7 +52,7 @@ export default function EMobilitySelection() {
 
 		return () => clearTimeout(timeoutId) // Cleanup function
 		//eslint-disable-next-line
-	}, [storeSector, geographies])
+	}, [storeSector, geographies]) */
 
 	return (
 		<div className="mt-10 mb-20 text-primary text-xs">
@@ -100,7 +100,9 @@ export default function EMobilitySelection() {
 														)
 													}
 													checked={
-														storeData.eMobility.typeOfVehicle.find(
+														storeData[
+															storeSector.value
+														]?.typeOfVehicle?.find(
 															(element) =>
 																element.value ===
 																item.value
@@ -119,7 +121,9 @@ export default function EMobilitySelection() {
 											</div>
 											<span
 												className={
-													storeData.eMobility.typeOfVehicle.find(
+													storeData[
+														storeSector.value
+													]?.typeOfVehicle?.find(
 														(element) =>
 															element.value ===
 															item.value
@@ -162,7 +166,7 @@ export default function EMobilitySelection() {
 								</li>
 							</ul>
 						</div>
-						{storeData[storeSector.value].typeOfVehicle.length >
+						{storeData[storeSector.value]?.typeOfVehicle?.length >
 							0 && (
 							<div className="px-5 py-2">
 								<span className="text-primary font-bold text-xs">
@@ -187,7 +191,7 @@ export default function EMobilitySelection() {
 															)
 														}
 														checked={
-															storeData.eMobility.typeOfVehicleContract.find(
+															storeData.eMobility?.typeOfVehicleContract?.find(
 																(element) =>
 																	element.value ===
 																	item.value
@@ -266,7 +270,7 @@ export default function EMobilitySelection() {
 													checked={
 														storeData[
 															storeSector.value
-														].chargingStations.find(
+														]?.chargingStations?.find(
 															(element) =>
 																element.value ===
 																item.value
@@ -287,7 +291,7 @@ export default function EMobilitySelection() {
 												className={
 													storeData[
 														storeSector.value
-													].chargingStations.find(
+													]?.chargingStations?.find(
 														(element) =>
 															element.value ===
 															item.value
@@ -301,8 +305,8 @@ export default function EMobilitySelection() {
 								)}
 							</ul>
 						</div>
-						{storeData[storeSector.value].chargingStations.length >
-							0 && (
+						{storeData[storeSector.value]?.chargingStations
+							?.length > 0 && (
 							<div className="px-5 py-2">
 								<span className="text-primary font-bold text-xs">
 									Type of Maintenance
@@ -329,7 +333,7 @@ export default function EMobilitySelection() {
 															storeData[
 																storeSector
 																	.value
-															].chargingStationsMaintenance.find(
+															]?.chargingStationsMaintenance?.find(
 																(element) =>
 																	element.value ===
 																	item.value
