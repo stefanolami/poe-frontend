@@ -2,10 +2,11 @@ import { produce } from 'immer'
 import { create } from 'zustand'
 import { persist, createJSONStorage, devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
+import selectionData from '../data/selectionData'
 
 export const useStore = create(
 	persist(
-		devtools((set) => ({
+		devtools((set, get) => ({
 			sector: {},
 			geographies: [],
 			data: {
@@ -47,6 +48,18 @@ export const useStore = create(
 						}
 					})
 				),
+			getSinglePrice: (category, item) => {
+				let total = 0
+
+				get().geographies.forEach((country) => {
+					total += parseInt(
+						selectionData[get().sector.value][category]?.find(
+							(x) => x.value === item.value
+						).price[country.value]
+					)
+				})
+				return total
+			},
 		})),
 		{
 			name: 'zustand-store',

@@ -16,6 +16,7 @@ export default function EMobilitySelection() {
 	const storeData = useStore((state) => state.data)
 	const addData = useStore((state) => state.addData)
 	const removeData = useStore((state) => state.removeData)
+	const getSinglePrice = useStore((state) => state.getSinglePrice)
 
 	const locale = useLocale()
 	const router = useRouter()
@@ -131,7 +132,10 @@ export default function EMobilitySelection() {
 														? 'font-bold'
 														: ''
 												}
-											>{`EUR ${item.price.euAdmin} / year`}</span>
+											>{`EUR ${getSinglePrice(
+												'typeOfVehicle',
+												item
+											)} / year`}</span>
 										</li>
 									)
 								)}
