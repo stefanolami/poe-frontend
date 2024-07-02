@@ -1,13 +1,13 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useMyContext } from '@/app/context-provider'
-import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
-import { useSearchParams } from 'next/navigation'
+import { useStore } from '@/store/store'
 
-export default function GeographySelector() {
-	const [missingGeographies, setMissingGeographies] = useState('')
-	const [geographies, setGeographies] = useState([])
+export default function GeographySelector({
+	missingGeographies,
+	handleContinue,
+}) {
+	const geographies = useStore((state) => state.geographies)
+	const addGeography = useStore((state) => state.addGeography)
+	const removeGeography = useStore((state) => state.removeGeography)
 	const items = [
 		{ value: 'euAdmin', label: 'EU Administrated' },
 		{ value: 'eu27', label: 'eu27, Island, Norway, UK, Switzerland ' },
@@ -17,42 +17,15 @@ export default function GeographySelector() {
 		{ value: 'russia', label: 'Russia ' },
 	]
 
-	const router = useRouter()
-	const locale = useLocale()
-	const urlParams = useSearchParams()
-	const geoParams = urlParams.get('geo')
-	const sectorParam = urlParams.get('s')
-
-	const handleCheckboxChange = (event) => {
-		const { value, checked } = event.target
-		setGeographies((prevGeographies) =>
-			checked
-				? [...prevGeographies, value]
-				: prevGeographies.filter((item) => item !== value)
-		)
-	}
-
-	const handleCLick = async () => {
-		if (geographies.length > 0 && sectorParam) {
-			router.push(
-				`/${locale}/selection?s=${sectorParam}&geo=${geographies.join(
-					'_'
-				)}`
-			)
-		} else if (geographies.length === 0) {
-			setMissingGeographies('Please select at least one geography')
-		} else if (!sectorParam) {
-			setMissingGeographies(
-				'Something went wrong. Please refresh the page and try again.'
-			)
+	const handleGeographies = (geography) => {
+		console.log(geographies.find((geo) => geography.value == geo.value))
+		if (geographies.find((geo) => geography.value == geo.value)) {
+			console.log('removing')
+			removeGeography(geography)
+		} else {
+			addGeography(geography)
 		}
 	}
-
-	useEffect(() => {
-		if (geoParams) {
-			setGeographies(geoParams.split('_'))
-		}
-	}, [locale, geoParams])
 
 	return (
 		<div className="text-xs xl:text-2xl w-full">
@@ -69,8 +42,14 @@ export default function GeographySelector() {
 							type="checkbox"
 							id={`checkbox-${index}`}
 							value={item.value} // Use a unique value for each item
-							checked={geographies.includes(item.value)} // Set checked state
-							onChange={handleCheckboxChange}
+							checked={
+								geographies.find(
+									(geo) => item.value == geo.value
+								)
+									? true
+									: false
+							} // Set checked state
+							onChange={() => handleGeographies(item)}
 							className="custom-checkbox"
 						/>
 						<label htmlFor={`checkbox-${index}`}>
@@ -85,7 +64,7 @@ export default function GeographySelector() {
 				</p>
 				<button
 					className="mx-auto font-unna font-bold text-base xl:text-4xl flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20"
-					onClick={handleCLick}
+					onClick={handleContinue}
 				>
 					Continue
 				</button>
