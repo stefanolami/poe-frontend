@@ -9,15 +9,29 @@ import selectionData from '../data/selectionData'
 import { useStore } from '../store/store'
 
 export default function EMobilitySelection() {
-	const [languages, setLanguages] = useState([])
-
-	const storeSector = useStore((state) => state.sector)
-	const geographies = useStore((state) => state.geographies)
-	const storeData = useStore((state) => state.data)
-	const addData = useStore((state) => state.addData)
-	const removeData = useStore((state) => state.removeData)
-	const getSinglePrice = useStore((state) => state.getSinglePrice)
-	const getAllAbovePrice = useStore((state) => state.getAllAbovePrice)
+	const {
+		storeSector,
+		geographies,
+		languages,
+		addLanguage,
+		removeLanguage,
+		storeData,
+		addData,
+		removeData,
+		getSinglePrice,
+		getAllAbovePrice,
+	} = useStore((state) => ({
+		storeSector: state.sector,
+		geographies: state.geographies,
+		languages: state.languages,
+		addLanguage: state.addLanguage,
+		removeLanguage: state.removeLanguage,
+		storeData: state.data,
+		addData: state.addData,
+		removeData: state.removeData,
+		getSinglePrice: state.getSinglePrice,
+		getAllAbovePrice: state.getAllAbovePrice,
+	}))
 
 	const locale = useLocale()
 	const router = useRouter()
@@ -34,12 +48,30 @@ export default function EMobilitySelection() {
 		}
 	}
 
-	const handleLanguages = (e) => {
-		setLanguages((prevLanguages) =>
-			e.target.checked
-				? [...prevLanguages, e.target.value]
-				: prevLanguages.filter((item) => item !== e.target.value)
-		)
+	const handleLanguages = (e, item) => {
+		e.target.checked ? addLanguage(item) : removeLanguage(item)
+	}
+
+	const handleAllAbove = (e, category) => {
+		e.target.checked
+			? selectionData[storeSector.value][category].forEach((item) => {
+					if (
+						!storeData[storeSector.value][category].find(
+							(el) => el.value === item.value
+						)
+					) {
+						addData(storeSector.value, category, item)
+					}
+			  })
+			: selectionData[storeSector.value][category].forEach((item) => {
+					if (
+						storeData[storeSector.value][category].find(
+							(el) => el.value === item.value
+						)
+					) {
+						removeData(category, item)
+					}
+			  })
 	}
 
 	useEffect(() => {
@@ -153,15 +185,23 @@ export default function EMobilitySelection() {
 													type="checkbox"
 													id="checkbox-vehicle-type-all-above"
 													value="all"
-													/* onChange={(e) =>
-													handleCheckbox(
-														e,
-														'typeOfVehicle'
-													)
-												}
-												checked={data.typeOfVehicle.includes(
-													vehicle.value
-												)} */
+													onChange={(e) =>
+														handleAllAbove(
+															e,
+															'typeOfVehicle'
+														)
+													}
+													checked={
+														storeData[
+															storeSector.value
+														]?.typeOfVehicle
+															?.length ===
+														selectionData.eMobility
+															.typeOfVehicle
+															.length
+															? true
+															: false
+													}
 													className="custom-checkbox scale-[.8] peer"
 												/>
 												<label
@@ -235,15 +275,26 @@ export default function EMobilitySelection() {
 														type="checkbox"
 														id={`checkbox-vehicle-contract-all-above`}
 														value="all"
-														/* onChange={(e) =>
-														handleCheckbox(
-															e,
-															'typeOfVehicleContract'
-														)
-													}
-													checked={data.typeOfVehicleContract.includes(
-														contract.value
-													)} */
+														onChange={(e) =>
+															handleAllAbove(
+																e,
+																'typeOfVehicleContract'
+															)
+														}
+														checked={
+															storeData[
+																storeSector
+																	.value
+															]
+																?.typeOfVehicleContract
+																?.length ===
+															selectionData
+																.eMobility
+																.typeOfVehicleContract
+																.length
+																? true
+																: false
+														}
 														className="custom-checkbox scale-[.8]"
 													/>
 													<label htmlFor="checkbox-vehicle-contract-all-above">
@@ -332,15 +383,23 @@ export default function EMobilitySelection() {
 													type="checkbox"
 													id="checkbox-charging-stations-all-above"
 													value="all"
-													/* onChange={(e) =>
-													handleCheckbox(
-														e,
-														'typeOfVehicle'
-													)
-												}
-												checked={data.typeOfVehicle.includes(
-													vehicle.value
-												)} */
+													onChange={(e) =>
+														handleAllAbove(
+															e,
+															'chargingStations'
+														)
+													}
+													checked={
+														storeData[
+															storeSector.value
+														]?.chargingStations
+															?.length ===
+														selectionData.eMobility
+															.chargingStations
+															.length
+															? true
+															: false
+													}
 													className="custom-checkbox scale-[.8] peer"
 												/>
 												<label
@@ -511,11 +570,20 @@ export default function EMobilitySelection() {
 														id={`checkbox-language-${index}`}
 														value={item.value}
 														onChange={(e) =>
-															handleLanguages(e)
+															handleLanguages(
+																e,
+																item
+															)
 														}
-														checked={languages.includes(
-															item.value
-														)}
+														checked={
+															languages?.find(
+																(element) =>
+																	element.value ===
+																	item.value
+															)
+																? true
+																: false
+														}
 														className="custom-checkbox scale-[.8] peer"
 													/>
 													<label
@@ -567,11 +635,7 @@ export default function EMobilitySelection() {
 							</div>
 						</section>
 					</div>
-					{/* <PriceModal
-				parentData={storeData}
-				parentGeographies={geographies}
-				languages={languages}
-			/> */}
+					<PriceModal />
 				</div>
 			) : (
 				<div>loading</div>

@@ -2,15 +2,10 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import selectionData from '@/data/selectionData'
 import { categoryValueToLabel } from '@/utils/helpers'
+import { useStore } from '@/store/store'
+import { get } from 'http'
 
-export default function PriceModal({
-	parentData,
-	parentGeographies,
-	languages,
-}) {
-	const [data, setData] = useState()
-	const [prices, setPrices] = useState([])
-	const [geographies, setGeographies] = useState()
+export default function PriceModal() {
 	const [isOpen, setIsOpen] = useState(false)
 	const [isOpenCategory, setIsOpenCategory] = useState({
 		general: false,
@@ -43,6 +38,34 @@ export default function PriceModal({
 		},
 	})
 
+	const {
+		storeSector,
+		geographies,
+		languages,
+		addLanguage,
+		removeLanguage,
+		storeData,
+		addData,
+		removeData,
+		getSinglePrice,
+		getAllAbovePrice,
+		getTotalPrice,
+		getSubTotal,
+	} = useStore((state) => ({
+		storeSector: state.sector,
+		geographies: state.geographies,
+		languages: state.languages,
+		addLanguage: state.addLanguage,
+		removeLanguage: state.removeLanguage,
+		storeData: state.data,
+		addData: state.addData,
+		removeData: state.removeData,
+		getSinglePrice: state.getSinglePrice,
+		getAllAbovePrice: state.getAllAbovePrice,
+		getTotalPrice: state.getTotalPrice,
+		getSubTotal: state.getSubTotal,
+	}))
+
 	const upArrow = '/up-arrow.png'
 	const downArrow = '/down-arrow.png'
 
@@ -60,7 +83,7 @@ export default function PriceModal({
 		})
 	}
 
-	const processPrice = (category) => {
+	/* const processPrice = (category) => {
 		if (
 			category == 'typeOfVehicle' ||
 			category == 'eVehiclesMaintenance' ||
@@ -132,7 +155,7 @@ export default function PriceModal({
 		setData(parentData)
 		setGeographies(parentGeographies)
 	}, [parentGeographies, parentData, languages])
-	console.log('languages children', languages)
+	console.log('languages children', languages) */
 
 	return (
 		<div
@@ -155,44 +178,53 @@ export default function PriceModal({
 				<>
 					<div className="w-full text-xs">
 						<div className="bg-white w-full h-[2px]"></div>
-						{Object.keys(data).map((category) => {
-							if (
-								category == 'typeOfVehicle' ||
-								category == 'eVehiclesMaintenance' ||
-								category == 'chargingStations'
-							) {
-								if (data[category]?.length > 0) {
-									return (
-										<div key={category}>
-											<div className="text-base font-bold pt-2 pb-1">
-												{categoryValueToLabel(category)}
+						{Object.keys(storeData[storeSector.value]).map(
+							(category) => {
+								if (
+									category == 'typeOfVehicle' ||
+									category == 'eVehiclesMaintenance' ||
+									category == 'chargingStations'
+								) {
+									if (
+										storeData[storeSector.value][category]
+											?.length > 0
+									) {
+										return (
+											<div key={category}>
+												<div className="text-base font-bold pt-2 pb-1">
+													{categoryValueToLabel(
+														category
+													)}
+												</div>
+												<div className="text-sm">
+													{storeData[
+														storeSector.value
+													][category].map((item) => {
+														return (
+															<div
+																key={item.value}
+																className="flex flex-row justify-between items-center"
+															>
+																<span>
+																	{item.value}
+																</span>
+																<span>
+																	EUR{' '}
+																	{getSinglePrice(
+																		category,
+																		item
+																	)}
+																</span>
+															</div>
+														)
+													})}
+												</div>
 											</div>
-											<div className="text-sm">
-												{data[category].map((item) => {
-													return (
-														<div
-															key={item.value}
-															className="flex flex-row justify-between items-center"
-														>
-															<span>
-																{item.value}
-															</span>
-															<span>
-																EUR{' '}
-																{getSinglePrice(
-																	category,
-																	item
-																)}
-															</span>
-														</div>
-													)
-												})}
-											</div>
-										</div>
-									)
+										)
+									}
 								}
 							}
-						})}
+						)}
 					</div>
 
 					{languages.length > 0 && (

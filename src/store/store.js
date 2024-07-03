@@ -9,6 +9,7 @@ export const useStore = create(
 		devtools((set, get) => ({
 			sector: {},
 			geographies: [],
+			languages: [],
 			data: {
 				eMobility: {
 					typeOfVehicle: [],
@@ -29,6 +30,16 @@ export const useStore = create(
 					geographies: state.geographies.filter(
 						(geography) =>
 							geography.value !== geographyToRemove.value
+					),
+				})),
+			addLanguage: (newLanguage) =>
+				set((state) => ({
+					languages: [...state.languages, newLanguage],
+				})),
+			removeLanguage: (languageToRemove) =>
+				set((state) => ({
+					languages: state.languages.filter(
+						(language) => language.value !== languageToRemove.value
 					),
 				})),
 			addData: (sector, category, item) =>
@@ -66,6 +77,38 @@ export const useStore = create(
 						total += get().getSinglePrice(category, item)
 					}
 				)
+				return total
+			},
+			getSubTotal: () => {
+				let total = 0
+				Object.keys(get().data.eMobility).forEach((category) => {
+					if (
+						category !== 'typeOfVehicleContract' &&
+						category !== 'chargingStationsMaintenance'
+					) {
+						get().data.eMobility[category].forEach((item) => {
+							total += get().getSinglePrice(category, item)
+						})
+					}
+				})
+				return total
+			},
+			getTotalPrice: () => {
+				let total = 0
+				Object.keys(get().data.eMobility).forEach((category) => {
+					if (
+						category !== 'typeOfVehicleContract' &&
+						category !== 'chargingStationsMaintenance'
+					) {
+						get().data.eMobility[category].forEach((item) => {
+							total += get().getSinglePrice(category, item)
+						})
+					}
+				})
+				if (get().languages.length > 0) {
+					const increment = get().languages.length * 0.25
+					total *= 1 + increment
+				}
 				return total
 			},
 		})),
