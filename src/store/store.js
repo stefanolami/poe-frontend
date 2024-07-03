@@ -50,14 +50,22 @@ export const useStore = create(
 				),
 			getSinglePrice: (category, item) => {
 				let total = 0
-
 				get().geographies.forEach((country) => {
 					total += parseInt(
-						selectionData[get().sector.value][category]?.find(
+						selectionData[get().sector?.value][category]?.find(
 							(x) => x.value === item.value
 						).price[country.value]
 					)
 				})
+				return total
+			},
+			getAllAbovePrice: (category) => {
+				let total = 0
+				selectionData[get().sector?.value][category]?.forEach(
+					(item) => {
+						total += get().getSinglePrice(category, item)
+					}
+				)
 				return total
 			},
 		})),
