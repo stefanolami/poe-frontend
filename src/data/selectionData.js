@@ -4,7 +4,6 @@ const selectionData = {
 			{
 				value: 'cars',
 				label: 'Cars (up to 3,5 tonnes)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -17,7 +16,6 @@ const selectionData = {
 			{
 				value: 'buses',
 				label: 'Buses (all types and sizes)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -30,7 +28,6 @@ const selectionData = {
 			{
 				value: 'trucks',
 				label: 'Trucks (above 3,5 tonnes)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -43,7 +40,6 @@ const selectionData = {
 			{
 				value: 'planes',
 				label: 'Planes',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -56,7 +52,6 @@ const selectionData = {
 			{
 				value: 'boats',
 				label: 'Boats',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -69,7 +64,6 @@ const selectionData = {
 			{
 				value: 'twoWheelers',
 				label: 'Two-wheelers (bicycles)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -106,7 +100,6 @@ const selectionData = {
 			{
 				value: 'evServices',
 				label: 'EV repair and maintenance services',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -119,7 +112,6 @@ const selectionData = {
 			{
 				value: 'diagnosis',
 				label: 'Diagnosis',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -132,7 +124,6 @@ const selectionData = {
 			{
 				value: 'exchangePurchase',
 				label: 'Exchange / Purchase',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -145,7 +136,6 @@ const selectionData = {
 			{
 				value: 'cars',
 				label: 'Cars (up to 3,5 tonnes)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -158,7 +148,6 @@ const selectionData = {
 			{
 				value: 'buses',
 				label: 'Buses (all types and sizes)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -171,7 +160,6 @@ const selectionData = {
 			{
 				value: 'trucks',
 				label: 'Trucks (above 3,5 tonnes)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -184,7 +172,6 @@ const selectionData = {
 			{
 				value: 'planes',
 				label: 'Planes',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -197,7 +184,6 @@ const selectionData = {
 			{
 				value: 'boats',
 				label: 'Boats',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -210,7 +196,6 @@ const selectionData = {
 			{
 				value: 'twoWheelers',
 				label: 'Two-wheelers (bicycles)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -225,7 +210,6 @@ const selectionData = {
 			{
 				value: 'bikesCars',
 				label: 'Motorbikes and Cars (AC/DC)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -238,7 +222,6 @@ const selectionData = {
 			{
 				value: 'buses',
 				label: 'Buses (all types and sizes)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -251,7 +234,6 @@ const selectionData = {
 			{
 				value: 'trucks',
 				label: 'Trucks (above 3,5 tonnes)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -264,7 +246,6 @@ const selectionData = {
 			{
 				value: 'planes',
 				label: 'Planes',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -277,7 +258,6 @@ const selectionData = {
 			{
 				value: 'boats',
 				label: 'Boats',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',
@@ -290,7 +270,6 @@ const selectionData = {
 			{
 				value: 'twoWheelers',
 				label: 'Two-wheelers (bicycles)',
-				countries: [],
 				price: {
 					euAdmin: '3000',
 					eu27: '1500',

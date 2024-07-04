@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import selectionData from '@/data/selectionData'
-import { categoryValueToLabel } from '@/utils/helpers'
+import { categoryValueToLabel, removeParenthesesContent } from '@/utils/helpers'
 import { useStore } from '@/store/store'
-import { get } from 'http'
 
 export default function PriceModal() {
 	const [isOpen, setIsOpen] = useState(false)
 	const [isOpenCategory, setIsOpenCategory] = useState({
 		general: false,
-		eVehicles: {
+		typeOfVehicle: {
 			cars: false,
 			buses: false,
 			trucks: false,
@@ -45,12 +44,12 @@ export default function PriceModal() {
 		addLanguage,
 		removeLanguage,
 		storeData,
-		addData,
-		removeData,
 		getSinglePrice,
 		getAllAbovePrice,
 		getTotalPrice,
 		getSubTotal,
+		addSingleGeography,
+		removeSingleGeography,
 	} = useStore((state) => ({
 		storeSector: state.sector,
 		geographies: state.geographies,
@@ -58,12 +57,12 @@ export default function PriceModal() {
 		addLanguage: state.addLanguage,
 		removeLanguage: state.removeLanguage,
 		storeData: state.data,
-		addData: state.addData,
-		removeData: state.removeData,
 		getSinglePrice: state.getSinglePrice,
 		getAllAbovePrice: state.getAllAbovePrice,
 		getTotalPrice: state.getTotalPrice,
 		getSubTotal: state.getSubTotal,
+		addSingleGeography: state.addSingleGeography,
+		removeSingleGeography: state.removeSingleGeography,
 	}))
 
 	const upArrow = '/up-arrow.png'
@@ -73,98 +72,40 @@ export default function PriceModal() {
 		setIsOpen(!isOpen)
 	}
 
-	const toggleOpenCategory = (category1, category2) => {
+	const toggleOpenItem = (category, item) => {
 		setIsOpenCategory({
 			...isOpenCategory,
-			[category1]: {
-				...isOpenCategory[category1],
-				[category2]: !isOpenCategory[category1][category2],
+			[category]: {
+				...isOpenCategory[category],
+				[item]: !isOpenCategory[category][item],
 			},
 		})
 	}
 
-	/* const processPrice = (category) => {
-		if (
-			category == 'typeOfVehicle' ||
-			category == 'eVehiclesMaintenance' ||
-			category == 'chargingStations'
-		) {
-			let total = 0
-			if (data[category].length > 0) {
-				data[category].forEach((item) => {
-					geographies.forEach((geo) => {
-						total += parseInt(
-							selectionData.eMobility[category].find(
-								(x) => x.value === item.value
-							).price[geo]
-						)
-					})
-				})
-				console.log('processed price ', category, total)
-				return total
-			}
-			return null
+	const handleGeography = (e, geography, category, item) => {
+		if (e.target.checked) {
+			addSingleGeography(geography, category, item)
+		} else {
+			removeSingleGeography(geography, category, item)
+			console.log('handling')
 		}
-		return null
 	}
 
-	const getSinglePrice = (category, item) => {
-		let total = 0
-		const geo = data[category].find((x) => x.value === item.value).countries
-		geo.forEach((country) => {
-			total += parseInt(
-				selectionData.eMobility[category].find(
-					(x) => x.value === item.value
-				).price[country]
-			)
-		})
-		setPrices((prevPrices) => ({
-			...prevPrices,
-			[category]: [
-				...prevPrices[category],
-				{
-					value: item.value,
-					price: total,
-				},
-			],
-		}))
-		return prices[category]?.find((x) => x.value === item.value).price
+	const handleLanguages = (e, item) => {
+		e.target.checked ? addLanguage(item) : removeLanguage(item)
 	}
-
-	const getSubTotal = () => {
-		let total = 0
-		for (const category in data) {
-			total += processPrice(category)
-		}
-		return total
-	}
-
-	const getTotalPrice = () => {
-		let total = 0
-		for (const category in data) {
-			total += processPrice(category)
-		}
-		if (languages.length > 0) {
-			const increment = languages.length * 0.25
-			total *= 1 + increment
-		}
-		return total
-	}
-
-	useEffect(() => {
-		setData(parentData)
-		setGeographies(parentGeographies)
-	}, [parentGeographies, parentData, languages])
-	console.log('languages children', languages) */
 
 	return (
 		<div
+			id="price-modal"
 			className={`fixed bottom-0 left-0 right-0 bg-secondary px-5 text-white transition-all duration-300 ${
 				isOpen ? 'h-dvh' : 'h-[82px]'
 			}`}
-			onClick={toggleOpen}
 		>
-			<div className="mx-auto flex flex-row justify-center items-center gap-4 pb-2 pt-[10px]">
+			<div
+				className="mx-auto flex flex-row justify-center items-center gap-4 pb-2 pt-[10px]"
+				onClick={toggleOpen}
+			>
 				<span className="text-base font-bold">Order Summary</span>
 				<Image
 					src={isOpen ? downArrow : upArrow}
@@ -196,25 +137,178 @@ export default function PriceModal() {
 														category
 													)}
 												</div>
-												<div className="text-sm">
+												<div className="text-sm flex flex-col gap-2">
 													{storeData[
 														storeSector.value
 													][category].map((item) => {
 														return (
 															<div
 																key={item.value}
-																className="flex flex-row justify-between items-center"
+																className="w-full"
 															>
-																<span>
-																	{item.value}
-																</span>
-																<span>
-																	EUR{' '}
-																	{getSinglePrice(
-																		category,
+																<div className="flex flex-row justify-between items-center w-full">
+																	<div
+																		className="flex flex-start gap-1 items-center"
+																		onClick={() =>
+																			toggleOpenItem(
+																				category,
+																				item.value
+																			)
+																		}
+																	>
+																		<Image
+																			src={
+																				isOpenCategory[
+																					category
+																				][
+																					item
+																						.value
+																				]
+																					? upArrow
+																					: downArrow
+																			}
+																			alt="arrow"
+																			width={
+																				15
+																			}
+																			height={
+																				15
+																			}
+																			className="scale-90"
+																		/>
+																		<span>
+																			{removeParenthesesContent(
+																				item.label
+																			)}
+																		</span>
+																	</div>
+																	{!isOpenCategory[
+																		category
+																	][
 																		item
+																			.value
+																	] && (
+																		<span>
+																			EUR{' '}
+																			{getSinglePrice(
+																				category,
+																				item
+																			)}
+																		</span>
 																	)}
-																</span>
+																</div>
+																{isOpenCategory[
+																	category
+																][
+																	item.value
+																] && (
+																	<div className="w-full my-2 px-3">
+																		<ul className=" flex flex-col items-center justify-start gap-[6px]">
+																			{geographies.map(
+																				(
+																					country
+																				) => {
+																					console.log(
+																						storeData
+																							.eMobility[
+																							category
+																						][
+																							item
+																								.value
+																						],
+																						country.value,
+																						item.value
+																					)
+																					return (
+																						<li
+																							key={
+																								country.value
+																							}
+																							className="flex flex-row justify-between w-full"
+																						>
+																							<div className="flex flex-row justify-start items-center gap-1">
+																								<input
+																									type="checkbox"
+																									id={`checkbox-${category}-${item.value}-${country.value}`}
+																									value={
+																										country.value
+																									}
+																									onChange={(
+																										e
+																									) =>
+																										handleGeography(
+																											e,
+																											country,
+																											category,
+																											item
+																										)
+																									}
+																									checked={
+																										storeData[
+																											storeSector
+																												.value
+																										]?.[
+																											category
+																										]
+																											?.find(
+																												(
+																													el
+																												) =>
+																													el.value ==
+																													item.value
+																											)
+																											.geographies.find(
+																												(
+																													element
+																												) =>
+																													element.value ===
+																													country.value
+																											)
+																											? true
+																											: false
+																									}
+																									className="custom-checkbox scale-[.8] peer"
+																								/>
+																								<label
+																									className="peer-checked:font-bold"
+																									htmlFor={`checkbox-${category}-${item.value}-${country.value}`}
+																								>
+																									{
+																										country.label
+																									}
+																								</label>
+																							</div>
+																							<span>
+																								EUR{' '}
+																								{
+																									selectionData[
+																										storeSector
+																											.value
+																									][
+																										category
+																									].find(
+																										(
+																											x
+																										) =>
+																											x.value ===
+																											item.value
+																									)
+																										.price[
+																										country
+																											.value
+																									]
+																								}
+																								{
+																									' / year'
+																								}
+																							</span>
+																						</li>
+																					)
+																				}
+																			)}
+																		</ul>
+																	</div>
+																)}
 															</div>
 														)
 													})}
@@ -239,7 +333,41 @@ export default function PriceModal() {
 								</span>
 							</div>
 							<div>
-								<span className="font-bold">Language</span>
+								<span className="text-base font-bold pt-2 pb-1">
+									Languages
+								</span>
+								<ul className="my-2 flex flex-col gap-2">
+									{languages.map((item, index) => (
+										<li key={item.value}>
+											<div className="flex flex-row items-center gap-1 justify-start">
+												<input
+													type="checkbox"
+													id={`checkbox-language-${index}`}
+													value={item.value}
+													onChange={(e) =>
+														handleLanguages(e, item)
+													}
+													checked={
+														languages?.find(
+															(element) =>
+																element.value ===
+																item.value
+														)
+															? true
+															: false
+													}
+													className="custom-checkbox scale-[.8] peer"
+												/>
+												<label
+													htmlFor={`checkbox-language-${index}`}
+													className="peer-checked:font-bold"
+												>
+													{item.label}
+												</label>
+											</div>
+										</li>
+									))}
+								</ul>
 							</div>
 						</div>
 					)}

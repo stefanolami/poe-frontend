@@ -44,7 +44,7 @@ export default function EMobilitySelection() {
 		) {
 			removeData(category, item)
 		} else {
-			addData(storeSector.value, category, item)
+			addData(category, item)
 		}
 	}
 
@@ -60,7 +60,7 @@ export default function EMobilitySelection() {
 							(el) => el.value === item.value
 						)
 					) {
-						addData(storeSector.value, category, item)
+						addData(category, item)
 					}
 			  })
 			: selectionData[storeSector.value][category].forEach((item) => {

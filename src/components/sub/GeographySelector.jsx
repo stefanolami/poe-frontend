@@ -10,7 +10,7 @@ export default function GeographySelector({
 	const removeGeography = useStore((state) => state.removeGeography)
 	const items = [
 		{ value: 'euAdmin', label: 'EU Administrated' },
-		{ value: 'eu27', label: 'eu27, Island, Norway, UK, Switzerland ' },
+		{ value: 'eu27', label: 'Eu27, Island, Norway, UK, Switzerland ' },
 		{ value: 'brazil', label: 'Brazil' },
 		{ value: 'turkey', label: 'Turkey ' },
 		{ value: 'colombia', label: 'Colombia ' },

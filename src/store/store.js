@@ -21,17 +21,63 @@ export const useStore = create(
 			},
 			changeSector: (newSector) =>
 				set((state) => ({ sector: newSector })),
-			addGeography: (newGeography) =>
+			addGeography: (newGeography) => {
 				set((state) => ({
 					geographies: [...state.geographies, newGeography],
-				})),
-			removeGeography: (geographyToRemove) =>
+				}))
+				Object.keys(get().data.eMobility).forEach((category) => {
+					if (
+						category !== 'typeOfVehicleContract' &&
+						category !== 'chargingStationsMaintenance'
+					) {
+						get().data.eMobility[category].forEach((item) => {
+							get().removeData(category, item)
+							get().addData(category, item)
+						})
+					}
+				})
+			},
+			removeGeography: (geographyToRemove) => {
 				set((state) => ({
 					geographies: state.geographies.filter(
 						(geography) =>
 							geography.value !== geographyToRemove.value
 					),
-				})),
+				}))
+				Object.keys(get().data.eMobility).forEach((category) => {
+					if (
+						category !== 'typeOfVehicleContract' &&
+						category !== 'chargingStationsMaintenance'
+					) {
+						get().data.eMobility[category].forEach((item) => {
+							get().removeData(category, item)
+							get().addData(category, item)
+						})
+					}
+				})
+			},
+			addSingleGeography: (geography, category, item) => {
+				set(
+					produce((state) => {
+						state.data.eMobility[category]
+							.find((element) => element.value === item.value)
+							.geographies.push(geography)
+					})
+				)
+			},
+			removeSingleGeography: (geographyToRemove, category, item) => {
+				set(
+					produce((state) => {
+						state.data.eMobility[category].find(
+							(element) => element.value === item.value
+						).geographies = state.data.eMobility[category]
+							.find((element) => element.value === item.value)
+							.geographies.filter(
+								(geo) => geo.value !== geographyToRemove.value
+							)
+					})
+				)
+			},
 			addLanguage: (newLanguage) =>
 				set((state) => ({
 					languages: [...state.languages, newLanguage],
@@ -42,10 +88,21 @@ export const useStore = create(
 						(language) => language.value !== languageToRemove.value
 					),
 				})),
-			addData: (sector, category, item) =>
+			addData: (category, item) =>
 				set(
 					produce((state) => {
-						state.data[sector][category].push(item)
+						if (
+							category === 'typeOfVehicleContract' ||
+							category === 'chargingStationsMaintenance'
+						) {
+							state.data.eMobility[category].push(item)
+						} else {
+							const newItem = {
+								...item,
+								geographies: state.geographies,
+							}
+							state.data.eMobility[category].push(newItem)
+						}
 					})
 				),
 			removeData: (category, itemToRemove) =>

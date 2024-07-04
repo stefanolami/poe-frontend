@@ -27,6 +27,15 @@
 	#geo-modifier .custom-checkbox::before {
 		@apply bg-primary;
 	}
+	#price-modal .custom-checkbox {
+		@apply border-white;
+	}
+	#price-modal .custom-checkbox:checked {
+		@apply bg-white;
+	}
+	#price-modal .custom-checkbox::before {
+		@apply bg-secondary;
+	}
 }
 
 input[type='checkbox'] {
