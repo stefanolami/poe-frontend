@@ -56,6 +56,28 @@ export const useStore = create(
 					}
 				})
 			},
+			addSingleGeography: (geography, category, item) => {
+				set(
+					produce((state) => {
+						state.data.eMobility[category]
+							.find((element) => element.value === item.value)
+							.geographies.push(geography)
+					})
+				)
+			},
+			removeSingleGeography: (geographyToRemove, category, item) => {
+				set(
+					produce((state) => {
+						state.data.eMobility[category].find(
+							(element) => element.value === item.value
+						).geographies = state.data.eMobility[category]
+							.find((element) => element.value === item.value)
+							.geographies.filter(
+								(geo) => geo.value !== geographyToRemove.value
+							)
+					})
+				)
+			},
 			addLanguage: (newLanguage) =>
 				set((state) => ({
 					languages: [...state.languages, newLanguage],
