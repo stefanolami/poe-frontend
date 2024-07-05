@@ -26,6 +26,30 @@ const config: Config = {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [
+		//@ts-ignore
+		function ({ addUtilities }) {
+			const newUtilities = {
+				'.scrollbar-thin': {
+					scrollbarWidth: 'thin',
+					scrollbarColor: 'white #009EC2',
+				},
+				'.scrollbar-webkit': {
+					'&::-webkit-scrollbar': {
+						width: '8px',
+					},
+					'&::-webkit-scrollbar-track': {
+						background: '#009EC2',
+					},
+					'&::-webkit-scrollbar-thumb': {
+						backgroundColor: 'white',
+						borderRadius: '20px',
+						border: '1px solid #009EC2',
+					},
+				},
+			}
+			addUtilities(newUtilities, ['responsive', 'hover'])
+		},
+	],
 }
 export default config

@@ -97,7 +97,7 @@ export default function PriceModalDesktop() {
 	return (
 		<div
 			id="price-modal"
-			className="bg-secondary max-h-[550px] px-5 text-white transition-all duration-300 overflow-auto"
+			className="bg-secondary max-h-[550px] px-5 text-white transition-all duration-300 overflow-auto scrollbar-thin scrollbar-webkit"
 		>
 			<div className="mx-auto flex flex-row justify-center items-center gap-4 pb-2 pt-[10px]">
 				<span className="text-xl font-bold">Order Summary</span>
