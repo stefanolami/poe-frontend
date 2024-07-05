@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage, devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import selectionData from '../data/selectionData'
+import { report } from 'process'
 
 export const useStore = create(
 	persist(
@@ -17,6 +18,8 @@ export const useStore = create(
 					eVehiclesMaintenance: [],
 					chargingStations: [],
 					chargingStationsMaintenance: [],
+					reportEu: false,
+					reportNonEu: false,
 				},
 			},
 			changeSector: (newSector) =>
@@ -28,9 +31,11 @@ export const useStore = create(
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						category !== 'typeOfVehicleContract' &&
-						category !== 'chargingStationsMaintenance'
+						category !== 'chargingStationsMaintenance' &&
+						category !== 'reportEu' &&
+						category !== 'reportNonEu'
 					) {
-						get().data.eMobility[category].forEach((item) => {
+						get().data.eMobility[category]?.forEach((item) => {
 							get().removeData(category, item)
 							get().addData(category, item)
 						})
@@ -47,7 +52,9 @@ export const useStore = create(
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						category !== 'typeOfVehicleContract' &&
-						category !== 'chargingStationsMaintenance'
+						category !== 'chargingStationsMaintenance' &&
+						category !== 'reportEu' &&
+						category !== 'reportNonEu'
 					) {
 						get().data.eMobility[category].forEach((item) => {
 							get().removeData(category, item)
@@ -116,6 +123,13 @@ export const useStore = create(
 						}
 					})
 				),
+			handleReport: (reportType) =>
+				set(
+					produce((state) => {
+						state.data.eMobility[reportType] =
+							!state.data.eMobility[reportType]
+					})
+				),
 			getSinglePrice: (category, item) => {
 				let total = 0
 				get().geographies.forEach((country) => {
@@ -127,6 +141,21 @@ export const useStore = create(
 				})
 				return total
 			},
+			getModalSinglePrice: (category, item) => {
+				let total = 0
+				get()
+					.data.eMobility[category].find(
+						(element) => element.value === item.value
+					)
+					.geographies.forEach((country) => {
+						total += parseInt(
+							selectionData[get().sector?.value][category]?.find(
+								(x) => x.value === item.value
+							).price[country.value]
+						)
+					})
+				return total
+			},
 			getAllAbovePrice: (category) => {
 				let total = 0
 				selectionData[get().sector?.value][category]?.forEach(
@@ -136,18 +165,26 @@ export const useStore = create(
 				)
 				return total
 			},
-			getSubTotal: () => {
+			getSubTotalPrice: () => {
 				let total = 0
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						category !== 'typeOfVehicleContract' &&
-						category !== 'chargingStationsMaintenance'
+						category !== 'chargingStationsMaintenance' &&
+						category !== 'reportEu' &&
+						category !== 'reportNonEu'
 					) {
 						get().data.eMobility[category].forEach((item) => {
-							total += get().getSinglePrice(category, item)
+							total += get().getModalSinglePrice(category, item)
 						})
 					}
 				})
+				if (get().data.eMobility.reportEu === true) {
+					total += 8000
+				}
+				if (get().data.eMobility.reportNonEu === true) {
+					total += 11000
+				}
 				return total
 			},
 			getTotalPrice: () => {
@@ -155,13 +192,21 @@ export const useStore = create(
 				Object.keys(get().data.eMobility).forEach((category) => {
 					if (
 						category !== 'typeOfVehicleContract' &&
-						category !== 'chargingStationsMaintenance'
+						category !== 'chargingStationsMaintenance' &&
+						category !== 'reportEu' &&
+						category !== 'reportNonEu'
 					) {
 						get().data.eMobility[category].forEach((item) => {
-							total += get().getSinglePrice(category, item)
+							total += get().getModalSinglePrice(category, item)
 						})
 					}
 				})
+				if (get().data.eMobility.reportEu === true) {
+					total += 8000
+				}
+				if (get().data.eMobility.reportNonEu === true) {
+					total += 11000
+				}
 				if (get().languages.length > 0) {
 					const increment = get().languages.length * 0.25
 					total *= 1 + increment

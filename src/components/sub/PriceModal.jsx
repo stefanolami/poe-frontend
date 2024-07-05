@@ -43,11 +43,13 @@ export default function PriceModal() {
 		languages,
 		addLanguage,
 		removeLanguage,
+		handleReport,
 		storeData,
 		getSinglePrice,
+		getModalSinglePrice,
 		getAllAbovePrice,
 		getTotalPrice,
-		getSubTotal,
+		getSubTotalPrice,
 		addSingleGeography,
 		removeSingleGeography,
 	} = useStore((state) => ({
@@ -56,11 +58,13 @@ export default function PriceModal() {
 		languages: state.languages,
 		addLanguage: state.addLanguage,
 		removeLanguage: state.removeLanguage,
+		handleReport: state.handleReport,
 		storeData: state.data,
 		getSinglePrice: state.getSinglePrice,
+		getModalSinglePrice: state.getModalSinglePrice,
 		getAllAbovePrice: state.getAllAbovePrice,
 		getTotalPrice: state.getTotalPrice,
-		getSubTotal: state.getSubTotal,
+		getSubTotalPrice: state.getSubTotalPrice,
 		addSingleGeography: state.addSingleGeography,
 		removeSingleGeography: state.removeSingleGeography,
 	}))
@@ -98,7 +102,7 @@ export default function PriceModal() {
 	return (
 		<div
 			id="price-modal"
-			className={`fixed bottom-0 left-0 right-0 bg-secondary px-5 text-white transition-all duration-300 ${
+			className={`fixed bottom-0 left-0 right-0 bg-secondary px-5 text-white transition-all duration-300 overflow-y-scroll ${
 				isOpen ? 'h-dvh' : 'h-[82px]'
 			}`}
 		>
@@ -189,11 +193,10 @@ export default function PriceModal() {
 																			.value
 																	] && (
 																		<span>
-																			EUR{' '}
-																			{getSinglePrice(
+																			{`EUR ${getModalSinglePrice(
 																				category,
 																				item
-																			)}
+																			)} / year`}
 																		</span>
 																	)}
 																</div>
@@ -320,7 +323,74 @@ export default function PriceModal() {
 							}
 						)}
 					</div>
-
+					{storeData.eMobility.reportEu === true ||
+					storeData.eMobility.reportNonEu === true ? (
+						<div className="my-3 text-sm">
+							<div className="text-base font-bold pt-2 pb-1">
+								European Commission Funding & Investment
+								Financing opportunities report
+							</div>
+							<ul className="py-2 flex flex-col items-center justify-start gap-[6px]">
+								{storeData.eMobility.reportEu === true && (
+									<li
+										key="eu"
+										className="flex flex-row justify-between w-full"
+									>
+										<div className="flex flex-row justify-start items-center gap-1">
+											<input
+												type="checkbox"
+												id="checkbox-eu-report-modal"
+												value="eu"
+												onChange={() =>
+													handleReport('reportEu')
+												}
+												checked={
+													storeData.eMobility.reportEu
+												}
+												className="custom-checkbox scale-[.8] peer"
+											/>
+											<label
+												className="peer-checked:font-bold"
+												htmlFor="checkbox-eu-report-modal"
+											>
+												EU
+											</label>
+										</div>
+										<span>EUR 8000 / year</span>
+									</li>
+								)}
+								{storeData.eMobility.reportNonEu === true && (
+									<li
+										key="non-eu"
+										className="flex flex-row justify-between w-full"
+									>
+										<div className="flex flex-row justify-start items-center gap-1">
+											<input
+												type="checkbox"
+												id="checkbox-non-eu-report-modal"
+												value="non-eu"
+												onChange={() =>
+													handleReport('reportNonEu')
+												}
+												checked={
+													storeData.eMobility
+														.reportNonEu
+												}
+												className="custom-checkbox scale-[.8] peer"
+											/>
+											<label
+												className="peer-checked:font-bold"
+												htmlFor="checkbox-non-eu-report-modal"
+											>
+												non-EU
+											</label>
+										</div>
+										<span>EUR 11000 / year</span>
+									</li>
+								)}
+							</ul>
+						</div>
+					) : null}
 					{languages.length > 0 && (
 						<div className="my-3">
 							<div className="flex flex-col justify-center items-center text-base font-bold">
@@ -329,7 +399,7 @@ export default function PriceModal() {
 								</span>
 								<div className="bg-white w-full h-[2px]"></div>
 								<span className="flex flex-row justify-end w-full">
-									EUR {getSubTotal()}
+									EUR {getSubTotalPrice()}
 								</span>
 							</div>
 							<div>
