@@ -30,8 +30,6 @@ const SectorButton = ({ text, handler, activeButton }) => {
 		//eslint-disable-next-line
 	}, [activeButton])
 
-	console.log('activeButton', activeButton)
-
 	return (
 		<motion.button
 			className="relative flex items-center justify-center bg-secondary hover:brightness-95 overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20"
