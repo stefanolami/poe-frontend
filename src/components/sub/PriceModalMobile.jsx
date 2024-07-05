@@ -4,7 +4,7 @@ import selectionData from '@/data/selectionData'
 import { categoryValueToLabel, removeParenthesesContent } from '@/utils/helpers'
 import { useStore } from '@/store/store'
 
-export default function PriceModal() {
+export default function PriceModalMobile() {
 	const [isOpen, setIsOpen] = useState(false)
 	const [isOpenCategory, setIsOpenCategory] = useState({
 		general: false,
@@ -102,7 +102,7 @@ export default function PriceModal() {
 	return (
 		<div
 			id="price-modal"
-			className={`fixed bottom-0 left-0 right-0 bg-secondary px-5 text-white transition-all duration-300 overflow-y-scroll ${
+			className={`fixed xl:hidden bottom-0 left-0 right-0 bg-secondary px-5 text-white transition-all duration-300 overflow-y-scroll ${
 				isOpen ? 'h-dvh' : 'h-[82px]'
 			}`}
 		>
