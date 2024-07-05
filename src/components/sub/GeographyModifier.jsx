@@ -102,7 +102,7 @@ export default function GeographyModifier() {
 						onClick={handleCLick}
 						className="block mx-auto px-4 py-1 text-primary font-bold bg-white hover:brightness-95 shadow-md hover:shadow-xl"
 					>
-						Apply
+						Close
 					</button>
 				</div>
 			)}

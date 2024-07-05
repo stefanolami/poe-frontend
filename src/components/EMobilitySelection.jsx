@@ -18,6 +18,7 @@ export default function EMobilitySelection() {
 		storeData,
 		addData,
 		removeData,
+		handleReport,
 		getSinglePrice,
 		getAllAbovePrice,
 	} = useStore((state) => ({
@@ -29,6 +30,7 @@ export default function EMobilitySelection() {
 		storeData: state.data,
 		addData: state.addData,
 		removeData: state.removeData,
+		handleReport: state.handleReport,
 		getSinglePrice: state.getSinglePrice,
 		getAllAbovePrice: state.getAllAbovePrice,
 	}))
@@ -486,8 +488,10 @@ export default function EMobilitySelection() {
 										type="checkbox"
 										id="checkbox-report-eu"
 										value="report-eu"
-										/* onChange={(e) => handleCheckbox(e, 'chargingStations')}
-						checked={data.chargingStations.includes(item.value)} */
+										onChange={() =>
+											handleReport('reportEu')
+										}
+										checked={storeData.eMobility.reportEu}
 										className="custom-checkbox scale-[.8] peer"
 									/>
 									<label
@@ -522,8 +526,12 @@ export default function EMobilitySelection() {
 										type="checkbox"
 										id="checkbox-report-non-eu"
 										value="report-non-eu"
-										/* onChange={(e) => handleCheckbox(e, 'chargingStations')}
-						checked={data.chargingStations.includes(item.value)} */
+										onChange={() =>
+											handleReport('reportNonEu')
+										}
+										checked={
+											storeData.eMobility.reportNonEu
+										}
 										className="custom-checkbox scale-[.8] peer"
 									/>
 									<label
