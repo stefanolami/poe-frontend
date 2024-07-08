@@ -213,6 +213,61 @@ export const useStore = create(
 				}
 				return total
 			},
+			getUser: () => {
+				let selection = {
+					typeOfVehicle: [],
+					typeOfVehicleContract: [],
+					/* eVehiclesMaintenance: [], */
+					chargingStations: [],
+					chargingStationsMaintenance: [],
+					/* reportEu: false,
+					reportNonEu: false, */
+				}
+				Object.keys(get().data.eMobility).forEach((category) => {
+					if (
+						category === 'typeOfVehicle' ||
+						category === 'chargingStations'
+					) {
+						console.log(`processing ${category}`)
+						get().data.eMobility[category].forEach((item) => {
+							selection[category].push({
+								name: item.value,
+								geography: item.geographies.map(
+									(geo) => geo.value
+								),
+							})
+							/* produce(() => {
+								selection[category].push({
+									name: item.value,
+									geography: item.geographies.map(
+										(geo) => geo.value
+									),
+								})
+							}) */
+						})
+					} else if (
+						category === 'typeOfVehicleContract' ||
+						category === 'chargingStationsMaintenance'
+					) {
+						console.log(`processing ${category}`)
+						get().data.eMobility[category].forEach((item) => {
+							selection[category].push(item.value)
+							produce(() => selection[category].push(item.value))
+						})
+					}
+				})
+				const user = {
+					sector: [get().sector.value],
+					chosenLanguage:
+						get().languages.length > 0
+							? get().languages.join(' ')
+							: 'english',
+					email: 'example@email.com',
+					name: 'John Doe',
+					...selection,
+				}
+				return user
+			},
 		})),
 		{
 			name: 'zustand-store',

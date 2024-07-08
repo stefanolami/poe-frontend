@@ -8,6 +8,7 @@ import PriceModalMobile from './sub/PriceModalMobile'
 import PriceModalDesktop from './sub/PriceModalDesktop'
 import selectionData from '../data/selectionData'
 import { useStore } from '../store/store'
+import axios from 'axios'
 
 export default function EMobilitySelection() {
 	const {
@@ -22,6 +23,7 @@ export default function EMobilitySelection() {
 		handleReport,
 		getSinglePrice,
 		getAllAbovePrice,
+		getUser,
 	} = useStore((state) => ({
 		storeSector: state.sector,
 		geographies: state.geographies,
@@ -34,6 +36,7 @@ export default function EMobilitySelection() {
 		handleReport: state.handleReport,
 		getSinglePrice: state.getSinglePrice,
 		getAllAbovePrice: state.getAllAbovePrice,
+		getUser: state.getUser,
 	}))
 
 	const locale = useLocale()
@@ -75,6 +78,15 @@ export default function EMobilitySelection() {
 						removeData(category, item)
 					}
 			  })
+	}
+
+	const sendUser = async () => {
+		const user = getUser()
+		const results = await axios.post(
+			'http://localhost:4000/api/registered-clients',
+			user
+		)
+		console.log(results)
 	}
 
 	useEffect(() => {
@@ -667,6 +679,12 @@ export default function EMobilitySelection() {
 									</span>
 								</div>
 							</section>
+							<button
+								onClick={sendUser}
+								className="mx-auto py-3 px-5 bg-secondary mt-6 mb-16"
+							>
+								Send
+							</button>
 						</div>
 						<div
 							id="desktop-recap"
