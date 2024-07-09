@@ -3,6 +3,7 @@ import Image from 'next/image'
 import selectionData from '@/data/selectionData'
 import { categoryValueToLabel, removeParenthesesContent } from '@/utils/helpers'
 import { useStore } from '@/store/store'
+import { get } from 'http'
 
 export default function PriceModalMobile() {
 	const [isOpen, setIsOpen] = useState(false)
@@ -450,6 +451,16 @@ export default function PriceModalMobile() {
 							EUR {getTotalPrice()}
 						</span>
 					</div>
+					{getTotalPrice() > 0 && (
+						<div className="flex flex-col justify-center items-center gap-5 mx-auto mt-8 mb-10 font-bold text-sm xl:text-lg text-center text-primary">
+							<button className="bg-white w-52 xl:w-72 h-9 xl:h-12 rounded-md shadow-md hover:shadow-xl">
+								Send the offer by email
+							</button>
+							<button className="bg-white w-52 xl:w-72 h-9 xl:h-12 rounded-md shadow-md hover:shadow-xl">
+								Order now
+							</button>
+						</div>
+					)}
 				</>
 			) : (
 				<>
