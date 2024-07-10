@@ -257,13 +257,13 @@ export const useStore = create(
 					}
 				})
 				const user = {
-					sector: [get().sector.value],
+					sectors: [get().sector.value],
 					chosenLanguage:
 						get().languages.length > 0
 							? get().languages.join(' ')
 							: 'english',
-					email: 'example@email.com',
-					name: 'John Doe',
+					email: 'example2@email.com',
+					name: 'John Doe 2',
 					...selection,
 				}
 				return user

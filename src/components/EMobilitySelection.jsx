@@ -9,6 +9,7 @@ import PriceModalDesktop from './sub/PriceModalDesktop'
 import selectionData from '../data/selectionData'
 import { useStore } from '../store/store'
 import axios from 'axios'
+import Loading from './Loading'
 
 export default function EMobilitySelection() {
 	const {
@@ -697,7 +698,7 @@ export default function EMobilitySelection() {
 					<PriceModalMobile />
 				</div>
 			) : (
-				<div>loading</div>
+				<Loading />
 			)}
 		</>
 	)

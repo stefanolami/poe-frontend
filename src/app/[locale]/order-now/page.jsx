@@ -3,6 +3,7 @@ import { unstable_setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import Hero from '@/components/Hero'
 import EMobilitySelection from '@/components/EMobilitySelection'
+import Loading from '../../../components/Loading'
 
 export async function generateMetadata({ params: { locale } }) {
 	const t = await getTranslations({
@@ -15,13 +16,13 @@ export async function generateMetadata({ params: { locale } }) {
 	}
 }
 
-export default function SelectionPage({ params: { locale } }) {
+export default function OrderNowPage({ params: { locale } }) {
 	unstable_setRequestLocale(locale)
 	const t = useTranslations('Index')
 	return (
 		<>
 			<Hero />
-			<EMobilitySelection />
+			<Loading />
 		</>
 	)
 }

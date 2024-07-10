@@ -3,10 +3,10 @@ import './globals.css'
 import { unstable_setRequestLocale } from 'next-intl/server'
 import Header from '@/components/Header'
 import HeaderWrapper from '@/components/HeaderWrapper'
-import { ContextProvider } from '../context-provider'
 import { jose, unna } from '../fonts'
 import { locales } from '../../navigation'
 import { Suspense } from 'react'
+import Loading from '@/components/Loading'
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -31,7 +31,7 @@ export default function LocaleLayout({
 			className={`${jose.variable} ${unna.variable}`}
 		>
 			<body>
-				<Suspense fallback="loading">
+				<Suspense fallback={<Loading />}>
 					<HeaderWrapper></HeaderWrapper>
 					<main>{children}</main>
 				</Suspense>
