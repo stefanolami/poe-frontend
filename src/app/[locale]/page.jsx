@@ -15,7 +15,7 @@ export async function generateMetadata({ params: { locale } }) {
 	}
 }
 
-export default function Home({ params: { locale } }) {
+export default function HomePage({ params: { locale } }) {
 	unstable_setRequestLocale(locale)
 	const t = useTranslations('Index')
 	return (
