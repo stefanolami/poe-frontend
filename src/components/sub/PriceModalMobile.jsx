@@ -70,7 +70,7 @@ export default function PriceModalMobile() {
 	return (
 		<div
 			id="price-modal"
-			className={`fixed xl:hidden bottom-0 left-0 right-0 bg-secondary px-5 text-white transition-all duration-300 overflow-auto scrollbar-thin scrollbar-webkit ${
+			className={`z-20 fixed xl:hidden bottom-0 left-0 right-0 bg-secondary px-5 text-white transition-all duration-300 overflow-auto scrollbar-thin scrollbar-webkit ${
 				isOpen ? 'h-dvh' : 'h-[82px]'
 			}`}
 		>

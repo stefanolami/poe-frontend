@@ -7,6 +7,7 @@ import { jose, unna } from '../fonts'
 import { locales } from '../../navigation'
 import { Suspense } from 'react'
 import Loading from '@/components/Loading'
+import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -30,10 +31,11 @@ export default function LocaleLayout({
 			lang={locale}
 			className={`${jose.variable} ${unna.variable}`}
 		>
-			<body>
+			<body className="relative pb-24 xl:pb-40">
 				<Suspense fallback={<Loading />}>
 					<HeaderWrapper></HeaderWrapper>
 					<main>{children}</main>
+					<Footer />
 				</Suspense>
 			</body>
 		</html>

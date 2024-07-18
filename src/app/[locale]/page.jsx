@@ -19,7 +19,7 @@ export default function HomePage({ params: { locale } }) {
 	unstable_setRequestLocale(locale)
 	const t = useTranslations('Index')
 	return (
-		<>
+		<div className="mb-24 xl:mb-20">
 			<Hero />
 			<p className="text-center text-primary text-xs md:text-base xl:text-2xl m-5 xl:mt-16 3xl:mt-24 xl:mx-52 3xl:mx-80 font-normal">
 				POE is a dynamic, real-time alert system designed to connect
@@ -30,6 +30,6 @@ export default function HomePage({ params: { locale } }) {
 				never miss an opportunity to engage in publicly funded projects.
 			</p>
 			<SectorSelector />
-		</>
+		</div>
 	)
 }
