@@ -3,40 +3,11 @@ import Image from 'next/image'
 import selectionData from '@/data/selectionData'
 import { categoryValueToLabel, removeParenthesesContent } from '@/utils/helpers'
 import { useStore } from '@/store/store'
-import { get } from 'http'
+import priceModalData from '@/data/priceModalData'
 
 export default function PriceModalMobile() {
 	const [isOpen, setIsOpen] = useState(false)
-	const [isOpenCategory, setIsOpenCategory] = useState({
-		general: false,
-		typeOfVehicle: {
-			cars: false,
-			buses: false,
-			trucks: false,
-			planes: false,
-			boats: false,
-			twoWheelers: false,
-		},
-		eVehiclesMaintenance: {
-			evServices: false,
-			diagnosis: false,
-			exchangePurchase: false,
-			cars: false,
-			buses: false,
-			trucks: false,
-			planes: false,
-			boats: false,
-			twoWheelers: false,
-		},
-		chargingStations: {
-			bikesCars: false,
-			buses: false,
-			trucks: false,
-			planes: false,
-			boats: false,
-			twoWheelers: false,
-		},
-	})
+	const [isOpenCategory, setIsOpenCategory] = useState(priceModalData)
 
 	const {
 		storeSector,
@@ -46,9 +17,7 @@ export default function PriceModalMobile() {
 		removeLanguage,
 		handleReport,
 		storeData,
-		getSinglePrice,
 		getModalSinglePrice,
-		getAllAbovePrice,
 		getTotalPrice,
 		getSubTotalPrice,
 		addSingleGeography,
@@ -61,9 +30,7 @@ export default function PriceModalMobile() {
 		removeLanguage: state.removeLanguage,
 		handleReport: state.handleReport,
 		storeData: state.data,
-		getSinglePrice: state.getSinglePrice,
 		getModalSinglePrice: state.getModalSinglePrice,
-		getAllAbovePrice: state.getAllAbovePrice,
 		getTotalPrice: state.getTotalPrice,
 		getSubTotalPrice: state.getSubTotalPrice,
 		addSingleGeography: state.addSingleGeography,

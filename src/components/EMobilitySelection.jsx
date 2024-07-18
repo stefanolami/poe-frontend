@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import GeographyModifier from './sub/GeographyModifier'
@@ -107,7 +107,7 @@ export default function EMobilitySelection() {
 	return (
 		<>
 			{Object.keys(storeSector).length > 0 && geographies.length > 0 ? (
-				<div className="mt-10 mb-20 text-primary text-xs xl:text-base">
+				<div className="mt-10 mb-20 mx-auto w-[90%] max-w-[1550px] text-primary text-xs xl:text-base">
 					<div className="flex flex-col items-center mx-auto justify-center gap-2 mb-10">
 						<div className="mx-auto font-unna font-bold text-lg xl:text-4xl flex items-center justify-center bg-secondary overflow-hidden text-white w-40 xl:w-96 h-9 xl:h-20">
 							{storeSector.label}
@@ -117,7 +117,7 @@ export default function EMobilitySelection() {
 						</div>
 					</div>
 					{/* FULL SECTION */}
-					<div className="flex flex-col items-center justify-center gap-3 mx-auto w-[90%] xl:w-4/5 xl:grid xl:grid-cols-[3fr_1fr] relative">
+					<div className="flex flex-col items-center justify-center gap-3 mx-auto w-full xl:w-4/5 xl:grid xl:grid-cols-[3fr_1fr] relative">
 						<div>
 							{/* FIRST SECTION */}
 							<section
