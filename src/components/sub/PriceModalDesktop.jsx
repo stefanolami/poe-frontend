@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Image from 'next/image'
+import axios from 'axios'
 import selectionData from '@/data/selectionData'
 import { categoryValueToLabel, removeParenthesesContent } from '@/utils/helpers'
 import { useStore } from '@/store/store'
@@ -19,6 +20,7 @@ export default function PriceModalDesktop() {
 		getModalSinglePrice,
 		getTotalPrice,
 		getSubTotalPrice,
+		getUser,
 		addSingleGeography,
 		removeSingleGeography,
 	} = useStore((state) => ({
@@ -32,6 +34,7 @@ export default function PriceModalDesktop() {
 		getModalSinglePrice: state.getModalSinglePrice,
 		getTotalPrice: state.getTotalPrice,
 		getSubTotalPrice: state.getSubTotalPrice,
+		getUser: state.getUser,
 		addSingleGeography: state.addSingleGeography,
 		removeSingleGeography: state.removeSingleGeography,
 	}))
@@ -60,6 +63,15 @@ export default function PriceModalDesktop() {
 
 	const handleLanguages = (e, item) => {
 		e.target.checked ? addLanguage(item) : removeLanguage(item)
+	}
+
+	const sendUser = async (confirmed) => {
+		const user = getUser(confirmed)
+		const results = await axios.post(
+			'http://localhost:4000/api/registered-clients',
+			user
+		)
+		console.log(results)
 	}
 
 	return (
@@ -385,10 +397,16 @@ export default function PriceModalDesktop() {
 			</div>
 			{getTotalPrice() > 0 && (
 				<div className="flex flex-col justify-center items-center gap-5 mx-auto mt-8 mb-10 font-bold text-sm xl:text-lg text-center text-primary">
-					<button className="bg-white w-52 xl:w-72 h-9 xl:h-12 rounded-md shadow-md hover:shadow-xl">
+					<button
+						className="bg-white w-52 xl:w-72 h-9 xl:h-12 rounded-md shadow-md hover:shadow-xl"
+						onClick={() => sendUser(false)}
+					>
 						Send the offer by email
 					</button>
-					<button className="bg-white w-52 xl:w-72 h-9 xl:h-12 rounded-md shadow-md hover:shadow-xl">
+					<button
+						className="bg-white w-52 xl:w-72 h-9 xl:h-12 rounded-md shadow-md hover:shadow-xl"
+						onClick={() => sendUser(true)}
+					>
 						Order now
 					</button>
 				</div>

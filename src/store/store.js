@@ -213,7 +213,7 @@ export const useStore = create(
 				}
 				return total
 			},
-			getUser: () => {
+			getUser: (confirmed) => {
 				let selection = {
 					typeOfVehicle: [],
 					typeOfVehicleContract: [],
@@ -262,8 +262,9 @@ export const useStore = create(
 						get().languages.length > 0
 							? get().languages.join(' ')
 							: 'english',
-					email: 'example2@email.com',
-					name: 'John Doe 2',
+					email: 'example@email.com',
+					name: 'John Doe',
+					accountConfirmed: confirmed,
 					...selection,
 				}
 				return user
