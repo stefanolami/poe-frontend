@@ -8,7 +8,7 @@ export default function GeographyModifier() {
 	const [missingGeographies, setMissingGeographies] = useState('')
 	const items = [
 		{ value: 'euAdmin', label: 'EU Administrated' },
-		{ value: 'eu27', label: 'eu27, Island, Norway, UK, Switzerland ' },
+		{ value: 'eu27', label: 'EU27, Island, Norway, UK, Switzerland ' },
 		{ value: 'brazil', label: 'Brazil' },
 		{ value: 'turkey', label: 'Turkey ' },
 		{ value: 'colombia', label: 'Colombia ' },

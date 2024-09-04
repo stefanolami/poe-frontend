@@ -77,12 +77,12 @@ export default function PriceModalDesktop() {
 	return (
 		<div
 			id="price-modal"
-			className="bg-secondary max-h-[85vh] px-5 text-white"
+			className="bg-secondary max-h-[80vh] px-5 text-white transition-all duration-300 overflow-auto scrollbar-thin scrollbar-webkit"
 		>
 			<div className="mx-auto flex flex-row justify-center items-center gap-4 pb-2 pt-[10px]">
 				<span className="text-xl font-bold">Order Summary</span>
 			</div>
-			<div className="max-h-[35vh] min-[1700px]:max-h-[45vh] pr-2 transition-all duration-300 overflow-auto scrollbar-thin scrollbar-webkit">
+			<div>
 				<div className="w-full text-xs">
 					<div className="bg-white w-full h-[2px]"></div>
 					{Object.keys(storeData[storeSector.value]).map(
@@ -112,7 +112,7 @@ export default function PriceModalDesktop() {
 														>
 															<div className="flex flex-row justify-between items-center w-full">
 																<div
-																	className="flex flex-start gap-1 items-center cursor-pointer"
+																	className="flex flex-start gap-1 items-center"
 																	onClick={() =>
 																		toggleOpenItem(
 																			category,
@@ -408,7 +408,7 @@ export default function PriceModalDesktop() {
 				</span>
 			</div>
 			{getTotalPrice() > 0 && (
-				<div className="flex flex-col justify-center items-center gap-5 mx-auto mt-8 pb-10 font-bold text-sm xl:text-lg text-center text-primary">
+				<div className="flex flex-col justify-center items-center gap-5 mx-auto mt-8 mb-10 font-bold text-sm xl:text-lg text-center text-primary">
 					<button
 						className="bg-white w-52 xl:w-72 h-9 xl:h-12 rounded-md shadow-md hover:shadow-xl"
 						onClick={() => sendUser(false)}
