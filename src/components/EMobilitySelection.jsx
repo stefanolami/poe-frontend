@@ -245,8 +245,12 @@ export default function EMobilitySelection() {
 									{storeData[storeSector.value]?.typeOfVehicle
 										?.length > 0 && (
 										<div className="px-5 py-2">
-											<span className="text-primary font-bold text-xs xl:text-xl">
+											<span className="text-primary block font-bold text-xs xl:text-xl">
 												Type of Contract
+											</span>
+											<span className="text-primary block text-xs xl:text-lg">
+												(Needs to be selected as soon as
+												any of the above is selected)
 											</span>
 											<ul className="space-y-1 mt-3">
 												{selectionData.eMobility.typeOfVehicleContract.map(
@@ -451,8 +455,12 @@ export default function EMobilitySelection() {
 									{storeData[storeSector.value]
 										?.chargingStations?.length > 0 && (
 										<div className="px-5 py-2">
-											<span className="text-primary font-bold text-xs xl:text-lg">
-												Type of Maintenance
+											<span className="text-primary block font-bold text-xs xl:text-lg">
+												Type of contract
+											</span>
+											<span className="text-primary block text-xs xl:text-lg">
+												(Needs to be selected as soon as
+												any of the above is selected)
 											</span>
 											<ul className="space-y-1 mt-3">
 												{selectionData.eMobility.chargingStationsMaintenance.map(

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { unstable_setRequestLocale } from 'next-intl/server'
-import Header from '@/components/Header'
 import HeaderWrapper from '@/components/HeaderWrapper'
 import { jose, unna } from '../fonts'
 import { locales } from '../../navigation'
@@ -31,7 +30,7 @@ export default function LocaleLayout({
 			lang={locale}
 			className={`${jose.variable} ${unna.variable}`}
 		>
-			<body className="relative pb-24 xl:pb-40 min-h-100vh">
+			<body className="relative pb-24 xl:pb-40 min-h-screen">
 				<Suspense fallback={<Loading />}>
 					<HeaderWrapper></HeaderWrapper>
 					<main>{children}</main>
